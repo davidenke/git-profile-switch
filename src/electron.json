@@ -1,0 +1,6 @@
+{
+  "name": "git-profile-switch",
+  "author": "David Enke",
+  "description": "Mac menu bar switch for git profiles.",
+  "main": "main.js"
+}
