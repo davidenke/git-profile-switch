@@ -13,6 +13,13 @@
 | `profile`    | --            |             | `{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }` | `undefined` |
 
 
+## CSS Custom Properties
+
+| Name                | Description            |
+| ------------------- | ---------------------- |
+| `--gps-avatar-size` | the size of the avatar |
+
+
 ## Dependencies
 
 ### Used by
