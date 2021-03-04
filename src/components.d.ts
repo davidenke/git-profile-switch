@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Profile } from "./types";
+import { Profile } from "./common/types";
 export namespace Components {
     interface GpsMenuBarApp {
     }

@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, Event, EventEmitter, h, Prop } from '@stencil/core';
-import { EventWithTarget } from '../../types';
+import { EventWithTarget } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-switch',
