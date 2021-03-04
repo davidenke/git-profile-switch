@@ -1,6 +1,8 @@
 import { watch } from 'fs';
 import { BrowserWindow, ipcMain, Tray } from 'electron';
+
 import { Action, Profile } from '../types';
+import { updateTray } from './tray';
 import { CONFIG_PATH, getProfile, updateProfile } from './profile';
 
 export const registerActions = (tray: Tray, window: BrowserWindow) => {
@@ -29,13 +31,13 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
 
   ipcMain.on(Action.GetCurrentProfile, async () => {
     const profile = await getProfile();
-    tray.setTitle(profile?.user?.email);
+    await updateTray(tray, profile);
     window.webContents.send(Action.ReceiveCurrentProfile, profile);
   });
 
   ipcMain.on(Action.SetCurrentProfile, async (_, profile: Profile) => {
     await updateProfile(profile);
-    tray.setTitle(profile?.user?.email);
+    await updateTray(tray, profile);
     window.webContents.send(Action.ReceiveCurrentProfile, profile);
   });
 
@@ -46,7 +48,7 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     }
 
     const profile = await getProfile();
-    tray.setTitle(profile?.user?.email);
+    await updateTray(tray, profile);
     window.webContents.send(Action.ReceiveCurrentProfile, profile);
   })
 
