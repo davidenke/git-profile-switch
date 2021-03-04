@@ -1,59 +1,25 @@
 import { join } from 'path';
-import { format } from 'url';
-import { app, BrowserWindow } from 'electron';
-import isDev from 'electron-is-dev';
+import { app, BrowserWindow, Tray } from 'electron';
+import { is } from 'electron-util';
+
+import { createTray } from './server/tray';
+import { createWindow, toggleWindow } from './server/window';
+import { registerActions } from './server/actions';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let tray: Tray;
+let window: BrowserWindow;
 
-function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 });
+// Don't show the app in the dock
+app.dock.hide();
 
-  // and load the index.html of the app.
-  win.loadURL(
-    isDev
-      ? 'http://localhost:3333'
-      : format({
-        pathname: join(__dirname, 'index.html'),
-        protocol: 'file',
-        slashes: true
-      })
-  );
+// Initialize tray and detail window
+app.on('ready', async () => {
+  tray = await createTray(join(__dirname, 'assets/icon/tray.png'), () => toggleWindow(tray, window));
+  window = await createWindow(is.development, 3333);
 
-  // Open the DevTools.
-  if (isDev) {
-    win.webContents.openDevTools();
-  }
-
-  // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null;
-  });
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
-
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  // Register listeners for ipc events
+  registerActions(tray, window);
 });
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow();
-  }
-});
