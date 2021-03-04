@@ -9,6 +9,7 @@
   ],
   "exclude": [
     "node_modules",
+    "src/server",
     "src/main.ts"
   ]
 }

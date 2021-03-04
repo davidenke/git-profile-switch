@@ -1,9 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true
   },
-  "files": [
+  "include": [
+    "src/server",
     "src/main.ts"
   ]
 }
