@@ -16,7 +16,7 @@ app.dock.hide();
 
 // Initialize tray and detail window
 app.on('ready', async () => {
-  tray = await createTray(join(__dirname, 'assets/icon/tray.png'), () => toggleWindow(tray, window));
+  tray = await createTray(join(__dirname, 'assets/icon/tray@1.png'), () => toggleWindow(tray, window));
   window = await createWindow(is.development, 3333);
 
   // Register listeners for ipc events
