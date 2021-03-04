@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Host, Prop } from '@stencil/core';
-import { Profile } from '../../types';
-import { prepareGravatarUrl } from '../../utils/gravatar.utils';
+import { Profile } from '../../../common/types';
+import { prepareGravatarUrl } from '../../../common/utils/gravatar.utils';
 
 @Component({
   tag: 'gps-menu-bar-info',

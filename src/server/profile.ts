@@ -4,7 +4,7 @@ import { exec } from 'child_process';
 import { flatten } from 'flat';
 import { default as getConfigPath } from 'git-config-path';
 import { Config, sync as parseConfig } from 'parse-git-config';
-import { Profile } from '../types';
+import { Profile } from '../common/types';
 
 const execAsync = promisify(exec);
 

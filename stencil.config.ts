@@ -8,7 +8,7 @@ export const config: Config = {
     openBrowser: false
   },
   watchIgnoredRegex: /\/server\/|main\.ts/,
-  globalStyle: 'src/styles/global.scss',
+  globalStyle: 'src/ui/styles/global.scss',
   namespace: 'gps',
   outputTargets: [
     {

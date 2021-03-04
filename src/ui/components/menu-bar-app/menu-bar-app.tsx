@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, State } from '@stencil/core';
-import { Action, Profile } from '../../types';
+import { Action, Profile } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-app',

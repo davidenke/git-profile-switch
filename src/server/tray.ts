@@ -3,8 +3,8 @@ import { join } from 'path';
 import { app, Tray } from 'electron';
 import jimp from 'jimp';
 
-import { Profile } from '../types';
-import { downloadGravatarImage } from '../utils/gravatar.utils';
+import { Profile } from '../common/types';
+import { downloadGravatarImage } from '../common/utils/gravatar.utils';
 import { getProfile } from './profile';
 
 export const createTray = async (icon: string, onClick: () => void = () => null): Promise<Tray> => {

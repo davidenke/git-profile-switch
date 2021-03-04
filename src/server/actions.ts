@@ -1,7 +1,7 @@
 import { watch } from 'fs';
 import { BrowserWindow, ipcMain, Tray } from 'electron';
 
-import { Action, Profile } from '../types';
+import { Action, Profile } from '../common/types';
 import { updateTray } from './tray';
 import { CONFIG_PATH, getProfile, updateProfile } from './profile';
 
