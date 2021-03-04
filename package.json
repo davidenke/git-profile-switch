@@ -12,7 +12,7 @@
     "build": "run-p build:*",
     "prestart": "npm run clean",
     "start:electron": "tsc --project tsconfig.electron.json --watch",
-    "start:stencil": "stencil build --dev --es5 --watch --serve",
+    "start:stencil": "stencil build --docs --dev --es5 --watch --serve",
     "prestart:preview": "wait-on http://localhost:3333/index.html",
     "start:preview": "electron ./dist",
     "start": "run-p start:*",
