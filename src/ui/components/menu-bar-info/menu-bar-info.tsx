@@ -1,6 +1,5 @@
 import { Component, ComponentInterface, h, Host, Prop } from '@stencil/core';
 import { Profile } from '../../../common/types';
-import { prepareGravatarUrl } from '../../../common/utils/gravatar.utils';
 
 @Component({
   tag: 'gps-menu-bar-info',
@@ -15,11 +14,14 @@ export class MenuBarInfo implements ComponentInterface {
   @Prop()
   profile?: Profile;
 
+  @Prop()
+  image?: string;
+
   render() {
     return (
       <Host style={ { '--gps-avatar-size': `${ this.avatarSize }px` } }>
         <figure class="avatar">
-          <img src={ prepareGravatarUrl(this.profile?.user?.email, 28, 'assets/icon/icon.png') }
+          <img src={ this.image }
                alt={ this.profile?.user?.name }
           />
         </figure>

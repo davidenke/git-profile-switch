@@ -10,6 +10,7 @@
 | Property     | Attribute     | Description | Type                                                                                                                                                       | Default     |
 | ------------ | ------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `avatarSize` | `avatar-size` |             | `number`                                                                                                                                                   | `28`        |
+| `image`      | `image`       |             | `string`                                                                                                                                                   | `undefined` |
 | `profile`    | --            |             | `{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }` | `undefined` |
 
 

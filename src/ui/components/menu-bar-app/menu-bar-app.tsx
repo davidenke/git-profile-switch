@@ -4,9 +4,11 @@ import { Action, Profile } from '../../../common/types';
 @Component({
   tag: 'gps-menu-bar-app',
   styleUrl: 'menu-bar-app.scss',
-  shadow: true
+  shadow: true,
 })
 export class MenuBarApp implements ComponentInterface {
+
+  private readonly _avatarSize = 28;
 
   @State()
   private _profiles: Profile[] = [];
@@ -14,10 +16,22 @@ export class MenuBarApp implements ComponentInterface {
   @State()
   private _currentProfile?: Profile;
 
+  @State()
+  private _currentImage?: string;
+
   async componentWillLoad() {
     // listen for current config changes
     window.api.receive(Action.ReceiveAllProfiles, profiles => this._profiles = profiles);
-    window.api.receive(Action.ReceiveCurrentProfile, profile => this._currentProfile = profile);
+    window.api.receive(Action.ReceiveCurrentProfile, profile => {
+      window.api.send(Action.GetProfileImage, {
+        email: profile?.user?.email,
+        size: this._avatarSize * window.devicePixelRatio || 1,
+      });
+      this._currentProfile = profile;
+    });
+    window.api.receive(Action.ReceiveProfileImage, image => {
+      this._currentImage = image;
+    });
 
     // request current config
     window.api.send(Action.GetAllProfiles);
@@ -33,11 +47,14 @@ export class MenuBarApp implements ComponentInterface {
 
   render() {
     return [
-      <gps-menu-bar-info profile={ this._currentProfile }/>,
-      <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
-                           items={ this._profiles.map(({ user }) => user.email) }
-                           onSwitch={ ({ detail }) => this.onProfileSelected(detail) }
-      />
+      <gps-menu-bar-info avatarSize={this._avatarSize}
+                         profile={this._currentProfile}
+                         image={this._currentImage}
+      />,
+      <gps-menu-bar-switch current={this._currentProfile?.user?.email}
+                           items={this._profiles.map(({ user }) => user.email)}
+                           onSwitch={({ detail }) => this.onProfileSelected(detail)}
+      />,
     ];
   }
 
