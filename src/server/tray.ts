@@ -1,11 +1,15 @@
-import { createWriteStream } from 'fs';
+import { createWriteStream, readFile, writeFile } from 'fs';
 import { join } from 'path';
+import { promisify } from 'util';
 import { app, Tray } from 'electron';
-import jimp from 'jimp';
+import { PNG } from 'pngjs';
 
 import { Profile } from '../common/types';
 import { downloadGravatarImage } from '../common/utils/gravatar.utils';
 import { getProfile } from './profile';
+
+const readFileAsync = promisify(readFile);
+const writeFileAsync = promisify(writeFile);
 
 export const createTray = async (icon: string, onClick: () => void = () => null): Promise<Tray> => {
   const tray = new Tray(join(icon));
@@ -17,7 +21,7 @@ export const createTray = async (icon: string, onClick: () => void = () => null)
 
 export const updateTray = async (tray: Tray, profile: Profile) => {
   // shorthand title to space with some prefix...
-  const setTitle = (email: string) => tray.setTitle(` ${ email }`);
+  const setTitle = (email: string) => tray.setTitle(` ${email}`);
   const setImage = (image: string) => tray.setImage(image);
 
   // use the fallback
@@ -33,7 +37,7 @@ export const updateTray = async (tray: Tray, profile: Profile) => {
 
   // prepare temp image
   const tempPath = app.getPath('temp');
-  const imagePath = join(tempPath, `${ profile.user.email }.png`);
+  const imagePath = join(tempPath, `${profile.user.email}.png`);
 
   // fetch temp image from gravatar
   try {
@@ -46,9 +50,19 @@ export const updateTray = async (tray: Tray, profile: Profile) => {
 
   // prepare native image from temp file
   try {
-    const image = await jimp.read(imagePath);
-    await image.circle().writeAsync(imagePath);
-  } catch (e) {}
+    const png = PNG.sync.read(await readFileAsync(imagePath));
+    for (let y = 0; y < png.height; y++) {
+      for (let x = 0; x < png.width; x++) {
+        const idx = (png.width * y + x) << 2;
+        const radius = png.height / 2;
+        if (y >= Math.sqrt(Math.pow(radius, 2) - Math.pow(x - radius, 2)) + radius || y <= -(Math.sqrt(Math.pow(radius, 2) - Math.pow(x - radius, 2))) + radius) {
+          png.data[idx + 3] = 0;
+        }
+      }
+    }
+    await writeFileAsync(imagePath, PNG.sync.write(png));
+  } catch (e) {
+  }
 
   // update icon from temp image
   setImage(imagePath);
