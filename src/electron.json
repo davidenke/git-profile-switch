@@ -2,6 +2,7 @@
   "name": "git-profile-switch",
   "author": "David Enke",
   "description": "Mac menu bar switch for git profiles.",
+  "appId": "dev.enke.git-profile-switch",
   "main": "main.js",
   "devDependencies": {
     "electron": "12.0.0"

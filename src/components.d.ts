@@ -11,6 +11,7 @@ export namespace Components {
     }
     interface GpsMenuBarInfo {
         "avatarSize": number;
+        "image"?: string;
         "profile"?: Profile;
     }
     interface GpsMenuBarSwitch {
@@ -48,6 +49,7 @@ declare namespace LocalJSX {
     }
     interface GpsMenuBarInfo {
         "avatarSize"?: number;
+        "image"?: string;
         "profile"?: Profile;
     }
     interface GpsMenuBarSwitch {

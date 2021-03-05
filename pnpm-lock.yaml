@@ -3,6 +3,7 @@ dependencies:
   flat: 5.0.2
   git-config-path: 2.0.0
   md5: 2.3.0
+  mkdirp: 1.0.4
   node-fetch: 2.6.1
   parse-git-config: 3.0.0
   pngjs: 6.0.0
@@ -17,6 +18,7 @@ devDependencies:
   '@types/flat': 5.0.1
   '@types/git-config-path': 2.0.1
   '@types/md5': 2.3.0
+  '@types/mkdirp': 1.0.1
   '@types/node': 14.14.31
   '@types/node-fetch': 2.5.8
   '@types/parse-git-config': 3.0.0
@@ -218,6 +220,12 @@ packages:
     optional: true
     resolution:
       integrity: sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
+  /@types/mkdirp/1.0.1:
+    dependencies:
+      '@types/node': 14.14.31
+    dev: true
+    resolution:
+      integrity: sha512-HkGSK7CGAXncr8Qn/0VqNtExEE+PHMWb+qlR1faHMao7ng6P3tAaoWWBMdva0gL5h4zprjIO89GJOLXsMcDm1Q==
   /@types/node-fetch/2.5.8:
     dependencies:
       '@types/node': 14.14.31
@@ -1336,6 +1344,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  /mkdirp/1.0.4:
+    dev: false
+    engines:
+      node: '>=10'
+    hasBin: true
+    resolution:
+      integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
   /ms/2.0.0:
     dev: true
     resolution:
@@ -2066,6 +2081,7 @@ specifiers:
   '@types/flat': 5.0.1
   '@types/git-config-path': 2.0.1
   '@types/md5': 2.3.0
+  '@types/mkdirp': 1.0.1
   '@types/node': 14.14.31
   '@types/node-fetch': 2.5.8
   '@types/parse-git-config': 3.0.0
@@ -2077,6 +2093,7 @@ specifiers:
   flat: 5.0.2
   git-config-path: 2.0.0
   md5: 2.3.0
+  mkdirp: 1.0.4
   node-fetch: 2.6.1
   npm-run-all: 4.1.5
   parse-git-config: 3.0.0

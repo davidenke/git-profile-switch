@@ -2,8 +2,10 @@ import { watch } from 'fs';
 import { BrowserWindow, ipcMain, Tray } from 'electron';
 
 import { Action, Profile } from '../common/types';
+import { CONFIG_PATH } from './utils/meta.utils';
+
 import { updateTray } from './tray';
-import { CONFIG_PATH, getProfile, updateProfile } from './profile';
+import { getProfile, getProfileImage, updateProfile } from './profile';
 
 export const registerActions = (tray: Tray, window: BrowserWindow) => {
   ipcMain.on(Action.GetAllProfiles, () => {
@@ -11,21 +13,21 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
       {
         user: {
           email: 'david@enke.dev',
-          name: 'David Enke'
-        }
+          name: 'David Enke',
+        },
       },
       {
         user: {
           email: 'post@davidenke.de',
-          name: 'David Enke'
-        }
+          name: 'David Enke',
+        },
       },
       {
         user: {
           email: 'david.enke@zalari.de',
-          name: 'David Enke'
-        }
-      }
+          name: 'David Enke',
+        },
+      },
     ] as Profile[]);
   });
 
@@ -33,6 +35,11 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     const profile = await getProfile();
     await updateTray(tray, profile);
     window.webContents.send(Action.ReceiveCurrentProfile, profile);
+  });
+
+  ipcMain.on(Action.GetProfileImage, async (_, { email, size }) => {
+    const image = await getProfileImage(email, size);
+    window.webContents.send(Action.ReceiveProfileImage, image);
   });
 
   ipcMain.on(Action.SetCurrentProfile, async (_, profile: Profile) => {
@@ -50,6 +57,6 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     const profile = await getProfile();
     await updateTray(tray, profile);
     window.webContents.send(Action.ReceiveCurrentProfile, profile);
-  })
+  });
 
 };
