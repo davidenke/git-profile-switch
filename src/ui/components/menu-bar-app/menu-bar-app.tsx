@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, State } from '@stencil/core';
-import { Action, Profile } from '../../../common/types';
+import { Profile, Subject } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-app',
@@ -20,28 +20,25 @@ export class MenuBarApp implements ComponentInterface {
   private _currentImage?: string;
 
   async componentWillLoad() {
-    // listen for current config changes
-    window.api.receive(Action.ReceiveAllProfiles, profiles => this._profiles = profiles);
-    window.api.receive(Action.ReceiveCurrentProfile, profile => {
-      window.api.send(Action.GetProfileImage, {
+    // subscribe to subjects
+    window.api.subscribe(Subject.AllProfiles, profiles => this._profiles = profiles);
+    window.api.subscribe(Subject.CurrentProfile, async profile => {
+      this._currentProfile = profile;
+      this._currentImage = await window.api.get(Subject.ProfileImage, {
         email: profile?.user?.email,
         size: this._avatarSize * window.devicePixelRatio || 1,
       });
-      this._currentProfile = profile;
-    });
-    window.api.receive(Action.ReceiveProfileImage, image => {
-      this._currentImage = image;
     });
 
-    // request current config
-    window.api.send(Action.GetAllProfiles);
-    window.api.send(Action.GetCurrentProfile);
+    // request once
+    this._profiles = await window.api.get(Subject.AllProfiles);
+    this._currentProfile = await window.api.get(Subject.CurrentProfile);
   }
 
   onProfileSelected(email: string) {
     const profile = this._profiles.find(profile => profile?.user?.email === email);
     if (profile !== undefined) {
-      window.api.send(Action.SetCurrentProfile, profile);
+      window.api.set(Subject.CurrentProfile, profile);
     }
   }
 

@@ -16,26 +16,22 @@ export type Profile = {
 export type EventWithTarget<T extends Element, E = Event> = E & { target: T; };
 
 export type API = {
-  send(action: Action, data?: any): void;
-  send(action: Action.GetAllProfiles): void;
-  send(action: Action.GetCurrentProfile): void;
-  send(action: Action.GetProfileImage, options?: { email?: string; size?: number; }): void;
-  send(action: Action.SetCurrentProfile, profile: Profile): void;
+  get(subject: Subject.Ping): Promise<number>;
 
-  receive(action: Action, func: (...args: any[]) => void): void;
-  receive(action: Action.ReceiveAllProfiles, func: (profiles: Profile[]) => void): void;
-  receive(action: Action.ReceiveCurrentProfile, func: (profile: Profile) => void): void;
-  receive(action: Action.ReceiveProfileImage, func: (image: string) => void): void;
+  subscribe(this, subject: Subject.AllProfiles, handler: (profiles: Profile[]) => void): () => void;
+  get(subject: Subject.AllProfiles): Promise<Profile[]>;
+
+  subscribe(this, subject: Subject.ProfileImage, handler: (image: string) => void): () => void;
+  get(subject: Subject.ProfileImage, payload?: { email?: string; size?: number; }): Promise<string>;
+
+  subscribe(this, subject: Subject.CurrentProfile, handler: (profile: Profile) => void): () => void;
+  get(subject: Subject.CurrentProfile): Promise<Profile>;
+  set(subject: Subject.CurrentProfile, payload: Profile): Promise<void>;
 }
 
-export enum Action {
-  GetCurrentProfile = 'get-current-profile',
-  ReceiveCurrentProfile = 'receive-current-profile',
-  SetCurrentProfile = 'set-current-profile',
-
-  GetProfileImage = 'get-profile-image',
-  ReceiveProfileImage = 'receive-profile-image',
-
-  GetAllProfiles = 'get-all-profiles',
-  ReceiveAllProfiles = 'receive-all-profiles',
+export enum Subject {
+  CurrentProfile = 'current-profile',
+  ProfileImage = 'profile-image',
+  AllProfiles = 'all-profiles',
+  Ping = 'ping',
 }
