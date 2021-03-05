@@ -5,7 +5,14 @@ import { request } from './server/utils/request.utils';
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('api', {
-  subscribe(this, subject, callback) {
+  subscribe(subject, callback) {
+    // whitelist channels
+    const validSubjects = Object.values(Subject);
+    if (!validSubjects.includes(subject)) {
+      return () => null;
+    }
+
+    // create subscription
     const handler = (_, { payload }) => callback(payload);
     const unsubscribe = () => { ipcRenderer.off(subject, handler); };
     ipcRenderer.on(subject, handler);
