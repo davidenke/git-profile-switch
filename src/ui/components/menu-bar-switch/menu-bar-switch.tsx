@@ -17,13 +17,18 @@ export class MenuBarSwitch implements ComponentInterface {
   @Prop()
   items: string[] = [];
 
+  @Prop()
+  disabled = false;
+
   handleSelect({ target }: EventWithTarget<HTMLSelectElement, InputEvent>) {
     this.switch.emit(target.value);
   }
 
   render() {
     return (
-      <select onInput={ this.handleSelect.bind(this) }>
+      <select disabled={ this.disabled }
+              onInput={ this.handleSelect.bind(this) }
+      >
         { this.items.map(item => (
           <option value={ item }
                   selected={ item === this.current }

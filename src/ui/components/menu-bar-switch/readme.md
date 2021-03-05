@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type       | Default     |
-| --------- | --------- | ----------- | ---------- | ----------- |
-| `current` | `current` |             | `string`   | `undefined` |
-| `items`   | --        |             | `string[]` | `[]`        |
+| Property   | Attribute  | Description | Type       | Default     |
+| ---------- | ---------- | ----------- | ---------- | ----------- |
+| `current`  | `current`  |             | `string`   | `undefined` |
+| `disabled` | `disabled` |             | `boolean`  | `false`     |
+| `items`    | --         |             | `string[]` | `[]`        |
 
 
 ## Events

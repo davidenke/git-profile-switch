@@ -16,6 +16,7 @@ export namespace Components {
     }
     interface GpsMenuBarSwitch {
         "current"?: string;
+        "disabled": boolean;
         "items": string[];
     }
 }
@@ -54,6 +55,7 @@ declare namespace LocalJSX {
     }
     interface GpsMenuBarSwitch {
         "current"?: string;
+        "disabled"?: boolean;
         "items"?: string[];
         "onSwitch"?: (event: CustomEvent<string>) => void;
     }
