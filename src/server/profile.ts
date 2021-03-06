@@ -1,11 +1,10 @@
-import { createWriteStream, existsSync } from 'fs';
+import { existsSync } from 'fs';
 import { join } from 'path';
 
 import { app } from 'electron';
 import { flatten } from 'flat';
 import mkdirp from 'mkdirp';
 import { Config, sync as parseConfig } from 'parse-git-config';
-import { PNG } from 'pngjs';
 
 import { Profile } from '../common/types';
 import { deleteFileAsync, execAsync, readFileAsync, writeFileAsync } from './utils/async.utils';
@@ -37,11 +36,10 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
   const imagePath = join(imageDir, `${email}@${size}.png`);
 
   // use existing image (unless regeneration is enforced)
-  if (existsSync(imagePath) && !force) {
+  if (existsSync(imagePath)) {
     if (!force) {
       return imagePath;
     }
-    console.info(`Prepare image for "${ email }" in size ${ size }`);
     await deleteFileAsync(imagePath);
   }
 
@@ -50,25 +48,8 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
 
   // fetch temp image from gravatar (if existing)
   try {
-    const imageStream = createWriteStream(imagePath);
-    await downloadGravatarImage(email, size, imageStream);
-  } catch (e) {
-    return fallback;
-  }
-
-  // crop image circle from temp file
-  try {
-    const png = PNG.sync.read(await readFileAsync(imagePath));
-    for (let y = 0; y < png.height; y++) {
-      for (let x = 0; x < png.width; x++) {
-        const idx = (png.width * y + x) << 2;
-        const radius = png.height / 2;
-        if (y >= Math.sqrt(Math.pow(radius, 2) - Math.pow(x - radius, 2)) + radius || y <= -(Math.sqrt(Math.pow(radius, 2) - Math.pow(x - radius, 2))) + radius) {
-          png.data[idx + 3] = 0;
-        }
-      }
-    }
-    await writeFileAsync(imagePath, PNG.sync.write(png, { colorType: 6 }));
+    const buffer = await downloadGravatarImage(email, size);
+    await writeFileAsync(imagePath, buffer);
     return imagePath;
   } catch (e) {
     return fallback;

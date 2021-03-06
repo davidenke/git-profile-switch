@@ -29,6 +29,7 @@
     "electron-util": "0.14.2",
     "flat": "5.0.2",
     "git-config-path": "2.0.0",
+    "jpeg-js": "0.4.3",
     "md5": "2.3.0",
     "mkdirp": "1.0.4",
     "node-fetch": "2.6.1",

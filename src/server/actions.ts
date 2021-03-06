@@ -28,6 +28,12 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
           email: 'david.enke@zalari.de',
           name: 'David Enke'
         }
+      },
+      {
+        user: {
+          email: 'david.enke.ext@zeiss.com',
+          name: 'David Enke'
+        }
       }
     ] as Profile[];
     window.webContents.send(Subject.AllProfiles, { id, type, payload });

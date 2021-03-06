@@ -2,6 +2,7 @@ dependencies:
   electron-util: 0.14.2
   flat: 5.0.2
   git-config-path: 2.0.0
+  jpeg-js: 0.4.3
   md5: 2.3.0
   mkdirp: 1.0.4
   node-fetch: 2.6.1
@@ -1180,6 +1181,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-F4WiW2xaV6wc1jxete70Rw4V/VuMd6IN+a5ilZsxG4uYtUXWu2kq9W5P2dz30e7Gmw8RCbY/u/uk+dMPma9tAg==
+  /jpeg-js/0.4.3:
+    dev: false
+    resolution:
+      integrity: sha512-ru1HWKek8octvUHFHvE5ZzQ1yAsJmIvRdGWvSoKV52XKyuyYA437QWDttXT8eZXDSbuMpHlLzPDZUPd6idIz+Q==
   /json-buffer/3.0.0:
     dev: true
     resolution:
@@ -2092,6 +2097,7 @@ specifiers:
   electron-util: 0.14.2
   flat: 5.0.2
   git-config-path: 2.0.0
+  jpeg-js: 0.4.3
   md5: 2.3.0
   mkdirp: 1.0.4
   node-fetch: 2.6.1
