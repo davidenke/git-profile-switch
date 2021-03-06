@@ -16,16 +16,17 @@ export const createWindow = async (isDevelopment = false, port = 3333): Promise<
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
-      preload: join(__dirname, 'preload.js') // use a preload script
+      preload: join(__dirname, 'preload.js'), // use a preload script
+      spellcheck: false, // disable spellcheck
     }
   });
 
   // and load the index.html of the app.
   if (isDevelopment) {
-    window.loadURL(`http://localhost:${ port }`);
-    // window.webContents.openDevTools({ mode: 'detach' });
+    await window.loadURL(`http://localhost:${ port }`);
+    window.webContents.openDevTools({ mode: 'detach' });
   } else {
-    window.loadURL(`file://${ join(__dirname, 'index.html') }`);
+    await window.loadURL(`file://${ join(__dirname, 'index.html') }`);
   }
 
   // Hide the window when it loses focus
@@ -48,7 +49,7 @@ export const getWindowPosition = (tray: Tray, window: BrowserWindow) => {
   // Position window 4 pixels vertically below the tray icon
   const y = Math.round(trayBounds.y + trayBounds.height + 4);
 
-  return { x: x, y: y };
+  return { x, y };
 };
 
 export const toggleWindow = (tray: Tray, window: BrowserWindow) => {
@@ -56,7 +57,7 @@ export const toggleWindow = (tray: Tray, window: BrowserWindow) => {
 };
 
 export const showWindow = (tray: Tray, window: BrowserWindow) => {
-  const position = getWindowPosition(tray, window);
-  window.setPosition(position.x, position.y, false);
+  const { x, y } = getWindowPosition(tray, window);
+  window.setPosition(x, y, false);
   window.show();
 };

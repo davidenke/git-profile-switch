@@ -13,6 +13,8 @@ export type Profile = {
   };
 };
 
+export type RequestType = 'get' | 'set';
+
 export type EventWithTarget<T extends Element, E = Event> = E & { target: T; };
 
 export type API = {

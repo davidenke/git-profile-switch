@@ -1,41 +1,20 @@
-import { contextBridge, ipcRenderer } from 'electron';
-import { API, Subject } from './common/types';
-import { request } from './server/utils/request.utils';
+import { contextBridge } from 'electron';
+import { API } from './common/types';
+import { processIfValid, request, listen } from './server/utils/request.utils';
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('api', {
   subscribe(subject, callback) {
-    // whitelist channels
-    const validSubjects = Object.values(Subject);
-    if (!validSubjects.includes(subject)) {
-      return () => null;
-    }
-
-    // create subscription
-    const handler = (_, { payload }) => callback(payload);
-    const unsubscribe = () => { ipcRenderer.off(subject, handler); };
-    ipcRenderer.on(subject, handler);
-    return unsubscribe;
+    return processIfValid(subject, () => {
+      const handler = (_, { payload }) => callback(payload);
+      return listen(subject, handler);
+    }, () => null);
   },
-  get: async (subject, payload) => {
-    // whitelist channels
-    const validSubjects = Object.values(Subject);
-    if (!validSubjects.includes(subject)) {
-      return;
-    }
-
-    // execute request
-    return request('get', subject, payload);
+  get(subject, payload) {
+    return processIfValid(subject, () => request('get', subject, payload));
   },
-  set: async (subject, payload) => {
-    // whitelist channels
-    const validSubjects = Object.values(Subject);
-    if (!validSubjects.includes(subject)) {
-      return;
-    }
-
-    // execute request
-    return request('set', subject, payload);
+  set(subject, payload) {
+    return processIfValid(subject, () => request('set', subject, payload));
   }
 } as API);
