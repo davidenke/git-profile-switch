@@ -17,4 +17,4 @@ contextBridge.exposeInMainWorld('api', {
   set(subject, payload) {
     return processIfValid(subject, () => request('set', subject, payload));
   }
-} as API);
+} as unknown as API);

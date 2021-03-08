@@ -17,7 +17,7 @@ export const createWindow = async (isDevelopment = false, port = 3333): Promise<
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: join(__dirname, 'preload.js'), // use a preload script
-      spellcheck: false, // disable spellcheck
+      spellcheck: false // disable spellcheck
     }
   });
 

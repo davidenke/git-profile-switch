@@ -2,24 +2,26 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 import { app } from 'electron';
-import { flatten } from 'flat';
 import mkdirp from 'mkdirp';
-import { Config, sync as parseConfig } from 'parse-git-config';
 
 import { Profile } from '../common/types';
-import { deleteFileAsync, execAsync, readFileAsync, writeFileAsync } from './utils/async.utils';
+import { deleteFileAsync, readFileAsync, writeFileAsync } from './utils/async.utils';
 import { downloadGravatarImage } from './utils/gravatar.utils';
 import { APP_ID, CONFIG_PATH } from './utils/meta.utils';
+import { parseConfig, serializeConfig, updateConfig } from './utils/config.utils';
 
 export const getProfile = async (): Promise<Profile> => {
-  const profile = parseConfig({ cwd: '/', path: CONFIG_PATH });
-  return profile as Profile;
+  return parseConfig(await readFileAsync(CONFIG_PATH)) as Profile;
 };
 
 export const updateProfile = async (profile: Profile) => {
-  const config: Config = flatten(profile);
-  for await (let key of Object.keys(config)) {
-    await execAsync(`git config --global ${key} "${config[key]}"`);
+  if (!existsSync(CONFIG_PATH)) {
+    // prepare file contents from scratch
+    await writeFileAsync(CONFIG_PATH, serializeConfig(profile));
+  } else {
+    // read and replace contents
+    const updated = updateConfig(profile, await readFileAsync(CONFIG_PATH));
+    await writeFileAsync(CONFIG_PATH, serializeConfig(updated));
   }
 };
 
@@ -33,7 +35,7 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
   // prepare temp image path
   const tempDir = app.getPath('temp');
   const imageDir = join(tempDir, APP_ID, 'images');
-  const imagePath = join(imageDir, `${email}@${size}.png`);
+  const imagePath = join(imageDir, `${ email }@${ size }.png`);
 
   // use existing image (unless regeneration is enforced)
   if (existsSync(imagePath)) {
@@ -59,5 +61,5 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
 export const getProfileImage = async (email?: string, size?: number, force = false): Promise<string> => {
   const imagePath = await getProfileImagePath(email, size, force);
   const imageBlob = await readFileAsync(imagePath, 'base64');
-  return `data:image/png;charset=utf-8;base64,${imageBlob}`;
+  return `data:image/png;charset=utf-8;base64,${ imageBlob }`;
 };

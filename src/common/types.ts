@@ -1,3 +1,9 @@
+export type Config = {
+  [group: string]: {
+    [key: string]: string;
+  };
+}
+
 export type Profile = {
   user: {
     name: string;
