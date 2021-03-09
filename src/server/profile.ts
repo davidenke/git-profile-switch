@@ -1,14 +1,12 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
-
-import { app } from 'electron';
 import mkdirp from 'mkdirp';
 
 import { Profile } from '../common/types';
 import { deleteFileAsync, readFileAsync, writeFileAsync } from './utils/async.utils';
-import { downloadGravatarImage } from './utils/gravatar.utils';
-import { APP_ID, CONFIG_PATH } from './utils/meta.utils';
 import { parseConfig, serializeConfig, updateConfig } from './utils/config.utils';
+import { downloadGravatarImage } from './utils/gravatar.utils';
+import { CONFIG_PATH, IMAGES_PATH } from './utils/meta.utils';
 
 export const getProfile = async (): Promise<Profile> => {
   return parseConfig(await readFileAsync(CONFIG_PATH)) as Profile;
@@ -33,9 +31,7 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
   }
 
   // prepare temp image path
-  const tempDir = app.getPath('temp');
-  const imageDir = join(tempDir, APP_ID, 'images');
-  const imagePath = join(imageDir, `${ email }@${ size }.png`);
+  const imagePath = join(IMAGES_PATH, `${ email }@${ size }.png`);
 
   // use existing image (unless regeneration is enforced)
   if (existsSync(imagePath)) {
@@ -46,7 +42,7 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
   }
 
   // prepare target directory (if necessary)
-  await mkdirp(imageDir);
+  await mkdirp(IMAGES_PATH);
 
   // fetch temp image from gravatar (if existing)
   try {

@@ -1,3 +1,18 @@
+export type Settings = {
+  general: {
+    // https://www.npmjs.com/package/@types/auto-launch
+    // https://www.npmjs.com/package/auto-launch
+    autoStart: boolean;
+  };
+  git: {
+    editor?: string;
+  };
+  theme: {
+    overrideSystem: boolean;
+    prefer?: 'dark' | 'light';
+  }
+};
+
 export type Config = {
   [group: string]: {
     [key: string]: string;
