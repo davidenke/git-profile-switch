@@ -34,9 +34,9 @@ export type Profile = {
   };
 };
 
-export type RequestType = 'get' | 'set';
-
 export type EventWithTarget<T extends Element, E = Event> = E & { target: T; };
+
+export type RequestType = 'get' | 'set';
 
 export type API = {
   get(subject: Subject.Ping): Promise<number>;
@@ -50,11 +50,16 @@ export type API = {
   subscribe(this, subject: Subject.CurrentProfile, handler: (profile: Profile) => void): () => void;
   get(subject: Subject.CurrentProfile): Promise<Profile>;
   set(subject: Subject.CurrentProfile, payload: Profile): Promise<void>;
+
+  subscribe(this, subject: Subject.Settings, handler: (settings: Settings) => void): () => void;
+  get(subject: Subject.Settings): Promise<Settings>;
+  set(subject: Subject.Settings, payload: Settings): Promise<void>;
 }
 
 export enum Subject {
   CurrentProfile = 'current-profile',
   ProfileImage = 'profile-image',
   AllProfiles = 'all-profiles',
+  Settings = 'settings',
   Ping = 'ping',
 }

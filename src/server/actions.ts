@@ -7,6 +7,7 @@ import { CONFIG_PATH } from './utils/meta.utils';
 import { updateTray } from './tray';
 import { getProfile, getProfileImage, updateProfile } from './profile';
 import { generateId } from './utils/request.utils';
+import { loadSettings, saveSettings } from './utils/settings.utils';
 
 export const registerActions = (tray: Tray, window: BrowserWindow) => {
   ipcMain.on(Subject.AllProfiles, (_, { id, type }) => {
@@ -58,6 +59,16 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
 
   ipcMain.on(Subject.Ping, async (_, { id, type }) => {
     window.webContents.send(Subject.Ping, { id, type, payload: +new Date() });
+  });
+
+  ipcMain.on(Subject.Settings, async (_, { id, type, payload }) => {
+    if (type === 'get') {
+      const settings = await loadSettings();
+      window.webContents.send(Subject.Settings, { id, type, payload: settings });
+    } else if (type === 'set' && payload !== undefined) {
+      await saveSettings(payload);
+      window.webContents.send(Subject.Settings, { id, type, payload });
+    }
   });
 
   // https://thisdavej.com/how-to-watch-for-files-changes-in-node-js/
