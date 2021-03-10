@@ -1,10 +1,14 @@
 @use '../../styles/utils' as utils;
 
 :host {
+  background-color: var(--color-background-header);
+  box-sizing: border-box;
   display: block;
   overflow: hidden;
+  padding: 0 utils.base-size(1.5);
+  margin: 0 utils.base-size(-1.5);
   transition: .3s ease-out;
-  transition-property: height, margin-bottom;
+  transition-property: height, margin-bottom, padding-bottom, padding-top;
 }
 
 :host(:not([visible])) {
@@ -13,25 +17,47 @@
 }
 
 :host([visible]) {
-  height: utils.base-size(11.25);
-  margin-bottom: utils.base-size(1.5);
+  height: utils.base-size(14);
+  padding: utils.base-size(1.5) utils.base-size(1.5);
+  margin: 0 utils.base-size(-1.5) utils.base-size(1.5);
 }
 
-label, input[type="text"], select {
-  display: block;
+label {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   outline: 0;
   width: 100%;
 
   &:not(:last-child) {
-    margin-bottom: utils.base-size(.5);
+    margin-bottom: utils.base-size(.75);
+  }
+
+  .label {
+    order: 1;
+  }
+
+  input[type="checkbox"] {
+    order: 0;
+
+    ~ .label {
+      padding-left: utils.base-size(.75);
+    }
+  }
+
+  input[type="text"],
+  select {
+    width: 100%;
+    order: 2;
+
+    ~ .label {
+      padding-right: utils.base-size(.75);
+    }
   }
 }
 
-label {
-  display: flex;
-  align-items: center;
-
-  .label {
-    padding-left: utils.base-size(.25);
-  }
+input,
+select {
+  margin: 0;
+  outline: 0;
 }

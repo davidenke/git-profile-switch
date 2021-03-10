@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property   | Attribute  | Description | Type                                                                                                                                | Default     |
-| ---------- | ---------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `disabled` | `disabled` |             | `boolean`                                                                                                                           | `false`     |
-| `settings` | --         |             | `{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: "dark" \| "light"; }; }` | `undefined` |
-| `visible`  | `visible`  |             | `boolean`                                                                                                                           | `false`     |
+| Property   | Attribute  | Description | Type                                                                                                                    | Default     |
+| ---------- | ---------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `disabled` | `disabled` |             | `boolean`                                                                                                               | `false`     |
+| `settings` | --         |             | `{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: Theme; }; }` | `undefined` |
+| `visible`  | `visible`  |             | `boolean`                                                                                                               | `false`     |
 
 
 ## Events
 
-| Event     | Description | Type                                                                                                                                             |
-| --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `updated` |             | `CustomEvent<{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: "dark" \| "light"; }; }>` |
+| Event     | Description | Type                                                                                                                                 |
+| --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `updated` |             | `CustomEvent<{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: Theme; }; }>` |
 
 
 ## Dependencies

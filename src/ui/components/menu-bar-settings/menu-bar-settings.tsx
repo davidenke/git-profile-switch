@@ -1,5 +1,5 @@
-import { Component, ComponentInterface, Event, EventEmitter, h, Prop } from '@stencil/core';
-import { EventWithTarget, Settings } from '../../../common/types';
+import { Component, ComponentInterface, Event, EventEmitter, h, Prop, State } from '@stencil/core';
+import { EventWithTarget, Settings, Theme } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-settings',
@@ -8,8 +8,13 @@ import { EventWithTarget, Settings } from '../../../common/types';
 })
 export class MenuBarSettings implements ComponentInterface {
 
+  private readonly _colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
   @Event()
   readonly updated: EventEmitter<Settings>;
+
+  @State()
+  private _systemTheme: Theme = this._colorScheme.matches ? 'dark' : 'light';
 
   @Prop()
   settings?: Settings;
@@ -36,6 +41,17 @@ export class MenuBarSettings implements ComponentInterface {
     this.updated.emit({ ...this.settings, theme: { ...this.settings.theme, prefer: value as 'dark' | 'light' } });
   }
 
+  private _isThemeSelected(theme: Theme): boolean {
+    const { overrideSystem = false, prefer } = this.settings?.theme;
+    return (overrideSystem && prefer === theme) || (!overrideSystem && this._systemTheme === theme);
+  }
+
+  connectedCallback() {
+    this._colorScheme.addEventListener('change', ({ matches }) => {
+      this._systemTheme = matches ? 'dark' : 'light';
+    })
+  }
+
   render() {
     return [
       <label>
@@ -46,12 +62,15 @@ export class MenuBarSettings implements ComponentInterface {
         />
         <span class="label">enable auto start at login</span>
       </label>,
-      <input type="text"
-             placeholder="default editor"
-             disabled={ this.disabled }
-             value={ this.settings?.git?.editor }
-             onChange={ (event: EventWithTarget<HTMLInputElement>) => this._handleEditor(event) }
-      />,
+      <label>
+        <input type="text"
+               placeholder="vim"
+               disabled={ this.disabled }
+               value={ this.settings?.git?.editor }
+               onChange={ (event: EventWithTarget<HTMLInputElement>) => this._handleEditor(event) }
+        />
+        <span class="label">editor</span>
+      </label>,
       <label>
         <input type="checkbox"
                disabled={ this.disabled }
@@ -60,22 +79,23 @@ export class MenuBarSettings implements ComponentInterface {
         />
         <span class="label">override system theme</span>
       </label>,
-      this.settings?.theme?.overrideSystem && (
-        <select disabled={ this.disabled }
+      <label>
+        <select disabled={ this.disabled || !this.settings?.theme?.overrideSystem }
                 onChange={ (event: EventWithTarget<HTMLSelectElement>) => this._handlePrefer(event) }
         >
           <option value="dark"
-                  selected={ this.settings?.theme?.prefer === 'dark' }
+                  selected={ this._isThemeSelected('dark') }
           >
             dark
           </option>
           <option value="light"
-                  selected={ this.settings?.theme?.prefer === 'light' }
+                  selected={ this._isThemeSelected('light') }
           >
             light
           </option>
         </select>
-      )
+        <span class="label">theme</span>
+      </label>
     ];
   }
 

@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { BrowserWindow, Tray } from 'electron';
 
-export const WINDOW_HEIGHT_DEFAULT = 87;
-export const WINDOW_HEIGHT_EXPANDED = 189;
+export const WINDOW_HEIGHT_DEFAULT = 80;
+export const WINDOW_HEIGHT_EXPANDED = 204;
 export const WINDOW_WIDTH = 250;
 
 export const createWindow = async (isDevelopment = false, port = 3333): Promise<BrowserWindow> => {

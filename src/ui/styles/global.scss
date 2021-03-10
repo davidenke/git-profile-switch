@@ -1,13 +1,13 @@
 :root {
   @media (prefers-color-scheme: dark) {
     --color-background-body: #1f1e21;
-    --color-background-header: #3d4043;
+    --color-background-header: #2c2c2c;
     --color-font: #e8eaed;
   }
 
   @media (prefers-color-scheme: light) {
     --color-background-body: #edf1f3;
-    --color-background-header: #e8eaed;
+    --color-background-header: #dce0e2;
     --color-font: #1f1e21;
   }
 

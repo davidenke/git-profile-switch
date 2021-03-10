@@ -1,3 +1,5 @@
+export type Theme = 'dark' | 'light';
+
 export type Settings = {
   general: {
     // https://www.npmjs.com/package/@types/auto-launch
@@ -9,7 +11,7 @@ export type Settings = {
   };
   theme: {
     overrideSystem: boolean;
-    prefer?: 'dark' | 'light';
+    prefer?: Theme;
   }
 };
 
