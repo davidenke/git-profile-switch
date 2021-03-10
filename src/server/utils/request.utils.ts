@@ -23,9 +23,9 @@ export const listen = (subject: Subject, handler: (event: IpcRendererEvent, ...a
     console.info(`Received ${ subject }`, ...args);
     handler(event, ...args);
   };
-  const unsubscribe = () => { ipcRenderer.off(subject, _handler); };
+
   ipcRenderer.on(subject, _handler);
-  return unsubscribe;
+  return () => { ipcRenderer.off(subject, _handler); };
 };
 
 export const request = async <R, T extends RequestType = 'get', S extends Subject = any, P = any>(type: T, subject: S, payload?: P): Promise<R> => {

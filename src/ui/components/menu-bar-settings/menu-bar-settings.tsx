@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { EventWithTarget, Settings, Theme } from '../../../common/types';
+import { addThemeListener, getTheme } from '../../utils/theme.utils';
 
 @Component({
   tag: 'gps-menu-bar-settings',
@@ -8,13 +9,16 @@ import { EventWithTarget, Settings, Theme } from '../../../common/types';
 })
 export class MenuBarSettings implements ComponentInterface {
 
-  private readonly _colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+  private readonly _unsubscribe = new Set<() => void>();
 
   @Event()
   readonly updated: EventEmitter<Settings>;
 
+  @Event()
+  readonly themeSelected: EventEmitter<Theme>;
+
   @State()
-  private _systemTheme: Theme = this._colorScheme.matches ? 'dark' : 'light';
+  private _systemTheme = getTheme();
 
   @Prop()
   settings?: Settings;
@@ -26,19 +30,25 @@ export class MenuBarSettings implements ComponentInterface {
   visible = false;
 
   private _handleAutoStart({ target: { checked: autoStart } }: EventWithTarget<HTMLInputElement>) {
-    this.updated.emit({ ...this.settings, general: { ...this.settings.general, autoStart } });
+    this.settings = { ...this.settings, general: { ...this.settings.general, autoStart } };
+    this.updated.emit(this.settings);
   }
 
   private _handleEditor({ target: { value: editor } }: EventWithTarget<HTMLInputElement>) {
-    this.updated.emit({ ...this.settings, git: { ...this.settings.git, editor } });
+    this.settings = { ...this.settings, git: { ...this.settings.git, editor } };
+    this.updated.emit(this.settings);
   }
 
   private _handleOverrideSystem({ target: { checked: overrideSystem } }: EventWithTarget<HTMLInputElement>) {
-    this.updated.emit({ ...this.settings, theme: { ...this.settings.theme, overrideSystem } });
+    this.settings = { ...this.settings, theme: { ...this.settings.theme, overrideSystem } };
+    this.updated.emit(this.settings);
+    this.themeSelected.emit(this._selectedTheme());
   }
 
   private _handlePrefer({ target: { value } }: EventWithTarget<HTMLSelectElement>) {
-    this.updated.emit({ ...this.settings, theme: { ...this.settings.theme, prefer: value as 'dark' | 'light' } });
+    this.settings = { ...this.settings, theme: { ...this.settings.theme, prefer: value as 'dark' | 'light' } };
+    this.updated.emit(this.settings);
+    this.themeSelected.emit(this._selectedTheme());
   }
 
   private _isThemeSelected(theme: Theme): boolean {
@@ -46,10 +56,20 @@ export class MenuBarSettings implements ComponentInterface {
     return (overrideSystem && prefer === theme) || (!overrideSystem && this._systemTheme === theme);
   }
 
+  private _selectedTheme(): Theme {
+    const { overrideSystem = false, prefer } = this.settings?.theme;
+    return overrideSystem ? prefer : this._systemTheme;
+  }
+
   connectedCallback() {
-    this._colorScheme.addEventListener('change', ({ matches }) => {
-      this._systemTheme = matches ? 'dark' : 'light';
-    })
+    // start listening to theme settings
+    this._unsubscribe.add(addThemeListener(theme => this._systemTheme = theme));
+    // notify initial theme
+    this.themeSelected.emit(this._selectedTheme());
+  }
+
+  disconnectedCallback() {
+    this._unsubscribe.forEach(unsubscribe => unsubscribe());
   }
 
   render() {

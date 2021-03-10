@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Profile, Settings } from "./common/types";
+import { Profile, Settings, Theme } from "./common/types";
 export namespace Components {
     interface GpsMenuBarApp {
     }
@@ -78,6 +78,7 @@ declare namespace LocalJSX {
     }
     interface GpsMenuBarSettings {
         "disabled"?: boolean;
+        "onThemeSelected"?: (event: CustomEvent<Theme>) => void;
         "onUpdated"?: (event: CustomEvent<Settings>) => void;
         "settings"?: Settings;
         "visible"?: boolean;

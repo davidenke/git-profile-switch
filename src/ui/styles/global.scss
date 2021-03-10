@@ -1,15 +1,18 @@
-:root {
-  @media (prefers-color-scheme: dark) {
-    --color-background-body: #1f1e21;
-    --color-background-header: #2c2c2c;
-    --color-font: #e8eaed;
-  }
+@mixin dark() {
+  --color-background-body: #1f1e21;
+  --color-background-header: #2c2c2c;
+  --color-font: #e8eaed;
+}
 
-  @media (prefers-color-scheme: light) {
-    --color-background-body: #edf1f3;
-    --color-background-header: #dce0e2;
-    --color-font: #1f1e21;
-  }
+@mixin light() {
+  --color-background-body: #edf1f3;
+  --color-background-header: #dce0e2;
+  --color-font: #1f1e21;
+}
+
+:root {
+  @media (prefers-color-scheme: dark) { @include dark(); }
+  @media (prefers-color-scheme: light) { @include light(); }
 
   --base-size: 8px;
 }
@@ -24,6 +27,9 @@ html {
 }
 
 body {
+  &[theme="dark"] { @include dark(); }
+  &[theme="light"] { @include light(); }
+
   height: 100vh;
   margin: 0;
   padding: 0;

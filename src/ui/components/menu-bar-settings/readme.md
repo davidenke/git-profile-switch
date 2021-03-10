@@ -16,9 +16,10 @@
 
 ## Events
 
-| Event     | Description | Type                                                                                                                                 |
-| --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `updated` |             | `CustomEvent<{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: Theme; }; }>` |
+| Event           | Description | Type                                                                                                                                 |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `themeSelected` |             | `CustomEvent<"dark" \| "light">`                                                                                                     |
+| `updated`       |             | `CustomEvent<{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: Theme; }; }>` |
 
 
 ## Dependencies

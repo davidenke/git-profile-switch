@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, State } from '@stencil/core';
-import { Profile, Settings, Subject } from '../../../common/types';
+import { Profile, Settings, Subject, Theme } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-app',
@@ -66,6 +66,10 @@ export class MenuBarApp implements ComponentInterface {
     await window.api.set(Subject.ShowSettings, this._showSettings);
   }
 
+  async setTheme(theme: Theme) {
+    document.body.setAttribute('theme', theme);
+  }
+
   async updateSettings(settings: Settings) {
     this._isIdle = true;
     this._settings = await window.api.set(Subject.Settings, settings);
@@ -83,6 +87,7 @@ export class MenuBarApp implements ComponentInterface {
       <gps-menu-bar-settings disabled={ this._isIdle }
                              settings={ this._settings }
                              visible={ this._settings && this._showSettings }
+                             onThemeSelected={ ({ detail }) => this.setTheme(detail) }
                              onUpdated={ ({ detail }) => this.updateSettings(detail) }
       />,
       <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
