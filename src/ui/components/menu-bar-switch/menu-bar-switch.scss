@@ -1,6 +1,9 @@
+@use '../../styles/utils' as utils;
+
 select {
   font-size: 1.25rem;
-  width: 100%;
+  margin-right: utils.base-size(-.5);
+  width: calc(100% + #{utils.base-size(.5)});
 
   background: none;
   border: 0;

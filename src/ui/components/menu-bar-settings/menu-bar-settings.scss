@@ -8,7 +8,7 @@
   padding: 0 utils.base-size(1.5);
   margin: 0 utils.base-size(-1.5);
   transition: .3s ease-out;
-  transition-property: height, margin-bottom, padding-bottom, padding-top;
+  transition-property: height, padding-bottom, padding-top;
 }
 
 :host(:not([visible])) {
@@ -19,7 +19,6 @@
 :host([visible]) {
   height: utils.base-size(14);
   padding: utils.base-size(1.5) utils.base-size(1.5);
-  margin: 0 utils.base-size(-1.5) utils.base-size(1.5);
 }
 
 label {

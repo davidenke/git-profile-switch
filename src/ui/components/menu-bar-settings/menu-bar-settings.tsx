@@ -64,7 +64,7 @@ export class MenuBarSettings implements ComponentInterface {
   connectedCallback() {
     // start listening to theme settings
     this._unsubscribe.add(addThemeListener(theme => this._systemTheme = theme));
-    // notify initial theme
+    // broadcast initial theme
     this.themeSelected.emit(this._selectedTheme());
   }
 

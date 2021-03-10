@@ -84,17 +84,17 @@ export class MenuBarApp implements ComponentInterface {
       >
         <gps-menu-bar-icon-settings onClick={ () => this.toggleSettings() }/>
       </gps-menu-bar-info>,
+      <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
+                           disabled={ this._showSettings }
+                           items={ this._profiles.map(({ user }) => user.email) }
+                           onSwitch={ ({ detail }) => this.selectProfile(detail) }
+      />,
       <gps-menu-bar-settings disabled={ this._isIdle }
                              settings={ this._settings }
                              visible={ this._settings && this._showSettings }
                              onThemeSelected={ ({ detail }) => this.setTheme(detail) }
                              onUpdated={ ({ detail }) => this.updateSettings(detail) }
       />,
-      <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
-                           disabled={ this._showSettings }
-                           items={ this._profiles.map(({ user }) => user.email) }
-                           onSwitch={ ({ detail }) => this.selectProfile(detail) }
-      />
     ];
   }
 
