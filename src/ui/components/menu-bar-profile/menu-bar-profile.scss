@@ -1,0 +1,32 @@
+@use '../../styles/utils' as utils;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  @include utils.transition(height);
+}
+
+:host(:not([visible])) {
+  max-height: 0;
+}
+
+:host([visible]) {
+  max-height: utils.base-size(6);
+}
+
+input {
+  font-size: inherit;
+  box-sizing: border-box;
+  outline: 0;
+  width: 100%;
+
+  @include utils.with-theme(dark) {
+    filter: invert(.85);
+  }
+
+  &:not(:last-child) {
+    margin-bottom: utils.base-size(.75);
+  }
+}

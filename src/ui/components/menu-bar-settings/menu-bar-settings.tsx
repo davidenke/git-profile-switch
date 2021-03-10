@@ -51,11 +51,6 @@ export class MenuBarSettings implements ComponentInterface {
     this.themeSelected.emit(this._selectedTheme());
   }
 
-  private _isThemeSelected(theme: Theme): boolean {
-    const { overrideSystem = false, prefer } = this.settings?.theme;
-    return (overrideSystem && prefer === theme) || (!overrideSystem && this._systemTheme === theme);
-  }
-
   private _selectedTheme(): Theme {
     const { overrideSystem = false, prefer } = this.settings?.theme;
     return overrideSystem ? prefer : this._systemTheme;
@@ -104,12 +99,12 @@ export class MenuBarSettings implements ComponentInterface {
                 onChange={ (event: EventWithTarget<HTMLSelectElement>) => this._handlePrefer(event) }
         >
           <option value="dark"
-                  selected={ this._isThemeSelected('dark') }
+                  selected={ this.settings?.theme?.prefer === 'dark' }
           >
             dark
           </option>
           <option value="light"
-                  selected={ this._isThemeSelected('light') }
+                  selected={ this.settings?.theme?.prefer === 'light' }
           >
             light
           </option>

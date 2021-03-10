@@ -1,3 +1,20 @@
 @function base-size($factor: 1) {
   @return calc(var(--base-size) * #{$factor});
 }
+
+@mixin transition($property, $duration: .3s, $timing: ease-out, $delay: 0s) {
+  transition: $duration $timing $delay;
+  transition-property: $property;
+}
+
+@mixin with-theme($theme) {
+  @media (prefers-color-scheme: $theme) {
+    :host-context(body:not([theme])) & {
+      @content;
+    }
+  }
+
+  :host-context([theme="#{$theme}"]) & {
+    @content;
+  }
+}

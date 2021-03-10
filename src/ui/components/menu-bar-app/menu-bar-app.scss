@@ -7,6 +7,15 @@
 }
 
 gps-menu-bar-info,
+gps-menu-bar-profile,
 gps-menu-bar-switch {
   margin-bottom: utils.base-size(1.5);
+}
+
+gps-menu-bar-profile {
+  @include utils.transition((margin-bottom, max-height));
+
+  &:not([visible]) {
+    margin-bottom: 0;
+  }
 }

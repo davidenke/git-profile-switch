@@ -5,15 +5,13 @@
   box-sizing: border-box;
   display: block;
   overflow: hidden;
-  padding: 0 utils.base-size(1.5);
   margin: 0 utils.base-size(-1.5);
-  transition: .3s ease-out;
-  transition-property: height, padding-bottom, padding-top;
+  @include utils.transition((height, padding-bottom, padding-top));
 }
 
 :host(:not([visible])) {
   height: 0;
-  margin-bottom: 0;
+  padding: 0 utils.base-size(1.5);
 }
 
 :host([visible]) {
@@ -28,16 +26,33 @@ label {
   outline: 0;
   width: 100%;
 
+  input,
+  select {
+    font-size: inherit;
+    margin: 0;
+    outline: 0;
+
+    &[disabled] ~ .label {
+      opacity: .3;
+    }
+  }
+
   &:not(:last-child) {
     margin-bottom: utils.base-size(.75);
   }
 
   .label {
+    opacity: 1;
     order: 1;
   }
 
   input[type="checkbox"] {
     order: 0;
+    filter: grayscale(1);
+
+    @include utils.with-theme(dark) {
+      filter: grayscale(1) invert(.85);
+    }
 
     ~ .label {
       padding-left: utils.base-size(.75);
@@ -46,17 +61,16 @@ label {
 
   input[type="text"],
   select {
+    box-sizing: border-box;
     width: 100%;
     order: 2;
+
+    @include utils.with-theme(dark) {
+      filter: invert(.85);
+    }
 
     ~ .label {
       padding-right: utils.base-size(.75);
     }
   }
-}
-
-input,
-select {
-  margin: 0;
-  outline: 0;
 }

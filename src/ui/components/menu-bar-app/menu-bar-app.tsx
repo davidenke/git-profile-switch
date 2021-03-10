@@ -16,7 +16,7 @@ export class MenuBarApp implements ComponentInterface {
   private _isIdle = false;
 
   @State()
-  private _showSettings = false;
+  private _isEditing = false;
 
   @State()
   private _profiles: Profile[] = [];
@@ -33,7 +33,7 @@ export class MenuBarApp implements ComponentInterface {
   async componentWillLoad() {
     // subscribe to subjects
     this._subscriptions.add(window.api.subscribe(Subject.AllProfiles, profiles => this._profiles = profiles));
-    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => this._showSettings = visible));
+    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => this._isEditing = visible));
     this._subscriptions.add(window.api.subscribe(Subject.CurrentProfile, async profile => {
       this._currentProfile = profile;
       this._currentImage = await window.api.get(Subject.ProfileImage, {
@@ -62,12 +62,16 @@ export class MenuBarApp implements ComponentInterface {
   }
 
   async toggleSettings() {
-    this._showSettings = !this._showSettings;
-    await window.api.set(Subject.ShowSettings, this._showSettings);
+    this._isEditing = !this._isEditing;
+    await window.api.set(Subject.ShowSettings, this._isEditing);
   }
 
-  async setTheme(theme: Theme) {
+  setTheme(theme: Theme) {
     document.body.setAttribute('theme', theme);
+  }
+
+  updateProfile({ email, name }: Profile['user']) {
+    console.log(email, name)
   }
 
   async updateSettings(settings: Settings) {
@@ -85,13 +89,18 @@ export class MenuBarApp implements ComponentInterface {
         <gps-menu-bar-icon-settings onClick={ () => this.toggleSettings() }/>
       </gps-menu-bar-info>,
       <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
-                           disabled={ this._showSettings }
+                           disabled={ false /*this._isEditing*/ }
                            items={ this._profiles.map(({ user }) => user.email) }
                            onSwitch={ ({ detail }) => this.selectProfile(detail) }
       />,
+      <gps-menu-bar-profile email={ this._currentProfile?.user?.email }
+                            name={ this._currentProfile?.user?.name }
+                            visible={ this._isEditing }
+                            onUpdated={({ detail }) => this.updateProfile(detail)}
+      />,
       <gps-menu-bar-settings disabled={ this._isIdle }
                              settings={ this._settings }
-                             visible={ this._settings && this._showSettings }
+                             visible={ this._isEditing }
                              onThemeSelected={ ({ detail }) => this.setTheme(detail) }
                              onUpdated={ ({ detail }) => this.updateSettings(detail) }
       />,
