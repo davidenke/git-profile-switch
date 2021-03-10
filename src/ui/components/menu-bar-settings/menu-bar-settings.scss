@@ -1,0 +1,37 @@
+@use '../../styles/utils' as utils;
+
+:host {
+  display: block;
+  overflow: hidden;
+  transition: .3s ease-out;
+  transition-property: height, margin-bottom;
+}
+
+:host(:not([visible])) {
+  height: 0;
+  margin-bottom: 0;
+}
+
+:host([visible]) {
+  height: utils.base-size(11.25);
+  margin-bottom: utils.base-size(1.5);
+}
+
+label, input[type="text"], select {
+  display: block;
+  outline: 0;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: utils.base-size(.5);
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+
+  .label {
+    padding-left: utils.base-size(.25);
+  }
+}

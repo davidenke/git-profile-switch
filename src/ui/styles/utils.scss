@@ -1,0 +1,3 @@
+@function base-size($factor: 1) {
+  @return calc(var(--base-size) * #{$factor});
+}

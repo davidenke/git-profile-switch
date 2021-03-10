@@ -1,8 +1,10 @@
+@use '../../styles/utils' as utils;
+
 :host {
   display: block;
-  padding: .75em 1em;
+  padding: utils.base-size(1.5);
 }
 
 gps-menu-bar-info {
-  margin-bottom: .75em;
+  margin-bottom: utils.base-size(1.5);
 }

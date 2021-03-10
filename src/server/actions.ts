@@ -7,7 +7,8 @@ import { CONFIG_PATH } from './utils/meta.utils';
 import { updateTray } from './tray';
 import { getProfile, getProfileImage, updateProfile } from './profile';
 import { generateId } from './utils/request.utils';
-import { loadSettings, saveSettings } from './utils/settings.utils';
+import { loadSettings, saveSettings, showSettings, toggleSettings } from './utils/settings.utils';
+import { WINDOW_HEIGHT_DEFAULT, WINDOW_HEIGHT_EXPANDED, WINDOW_WIDTH } from './window';
 
 export const registerActions = (tray: Tray, window: BrowserWindow) => {
   ipcMain.on(Subject.AllProfiles, (_, { id, type }) => {
@@ -68,6 +69,16 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     } else if (type === 'set' && payload !== undefined) {
       await saveSettings(payload);
       window.webContents.send(Subject.Settings, { id, type, payload });
+    }
+  });
+
+  ipcMain.on(Subject.ShowSettings, async (_, { id, type, payload }) => {
+    if (type === 'get') {
+      window.webContents.send(Subject.ShowSettings, { id, type, payload: showSettings });
+    } else if (type === 'set' && payload !== undefined) {
+      toggleSettings(payload);
+      window.setSize(WINDOW_WIDTH, payload ? WINDOW_HEIGHT_EXPANDED : WINDOW_HEIGHT_DEFAULT, true);
+      window.webContents.send(Subject.ShowSettings, { id, type, payload });
     }
   });
 

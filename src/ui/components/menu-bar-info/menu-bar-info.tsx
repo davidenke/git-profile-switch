@@ -29,6 +29,9 @@ export class MenuBarInfo implements ComponentInterface {
           <span class="name">{ this.profile?.user?.name }</span>
           <span class="email">{ this.profile?.user?.email }</span>
         </div>
+        <nav class="actions">
+          <slot/>
+        </nav>
       </Host>
     );
   }

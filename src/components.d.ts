@@ -5,14 +5,21 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Profile } from "./common/types";
+import { Profile, Settings } from "./common/types";
 export namespace Components {
     interface GpsMenuBarApp {
+    }
+    interface GpsMenuBarIconSettings {
     }
     interface GpsMenuBarInfo {
         "avatarSize": number;
         "image"?: string;
         "profile"?: Profile;
+    }
+    interface GpsMenuBarSettings {
+        "disabled": boolean;
+        "settings"?: Settings;
+        "visible": boolean;
     }
     interface GpsMenuBarSwitch {
         "current"?: string;
@@ -27,11 +34,23 @@ declare global {
         prototype: HTMLGpsMenuBarAppElement;
         new (): HTMLGpsMenuBarAppElement;
     };
+    interface HTMLGpsMenuBarIconSettingsElement extends Components.GpsMenuBarIconSettings, HTMLStencilElement {
+    }
+    var HTMLGpsMenuBarIconSettingsElement: {
+        prototype: HTMLGpsMenuBarIconSettingsElement;
+        new (): HTMLGpsMenuBarIconSettingsElement;
+    };
     interface HTMLGpsMenuBarInfoElement extends Components.GpsMenuBarInfo, HTMLStencilElement {
     }
     var HTMLGpsMenuBarInfoElement: {
         prototype: HTMLGpsMenuBarInfoElement;
         new (): HTMLGpsMenuBarInfoElement;
+    };
+    interface HTMLGpsMenuBarSettingsElement extends Components.GpsMenuBarSettings, HTMLStencilElement {
+    }
+    var HTMLGpsMenuBarSettingsElement: {
+        prototype: HTMLGpsMenuBarSettingsElement;
+        new (): HTMLGpsMenuBarSettingsElement;
     };
     interface HTMLGpsMenuBarSwitchElement extends Components.GpsMenuBarSwitch, HTMLStencilElement {
     }
@@ -41,17 +60,27 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "gps-menu-bar-app": HTMLGpsMenuBarAppElement;
+        "gps-menu-bar-icon-settings": HTMLGpsMenuBarIconSettingsElement;
         "gps-menu-bar-info": HTMLGpsMenuBarInfoElement;
+        "gps-menu-bar-settings": HTMLGpsMenuBarSettingsElement;
         "gps-menu-bar-switch": HTMLGpsMenuBarSwitchElement;
     }
 }
 declare namespace LocalJSX {
     interface GpsMenuBarApp {
     }
+    interface GpsMenuBarIconSettings {
+    }
     interface GpsMenuBarInfo {
         "avatarSize"?: number;
         "image"?: string;
         "profile"?: Profile;
+    }
+    interface GpsMenuBarSettings {
+        "disabled"?: boolean;
+        "onUpdated"?: (event: CustomEvent<Settings>) => void;
+        "settings"?: Settings;
+        "visible"?: boolean;
     }
     interface GpsMenuBarSwitch {
         "current"?: string;
@@ -61,7 +90,9 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "gps-menu-bar-app": GpsMenuBarApp;
+        "gps-menu-bar-icon-settings": GpsMenuBarIconSettings;
         "gps-menu-bar-info": GpsMenuBarInfo;
+        "gps-menu-bar-settings": GpsMenuBarSettings;
         "gps-menu-bar-switch": GpsMenuBarSwitch;
     }
 }
@@ -70,7 +101,9 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "gps-menu-bar-app": LocalJSX.GpsMenuBarApp & JSXBase.HTMLAttributes<HTMLGpsMenuBarAppElement>;
+            "gps-menu-bar-icon-settings": LocalJSX.GpsMenuBarIconSettings & JSXBase.HTMLAttributes<HTMLGpsMenuBarIconSettingsElement>;
             "gps-menu-bar-info": LocalJSX.GpsMenuBarInfo & JSXBase.HTMLAttributes<HTMLGpsMenuBarInfoElement>;
+            "gps-menu-bar-settings": LocalJSX.GpsMenuBarSettings & JSXBase.HTMLAttributes<HTMLGpsMenuBarSettingsElement>;
             "gps-menu-bar-switch": LocalJSX.GpsMenuBarSwitch & JSXBase.HTMLAttributes<HTMLGpsMenuBarSwitchElement>;
         }
     }

@@ -18,9 +18,9 @@ export const processIfValid = <R, F>(subject: Subject, handler: () => R, fail?: 
 };
 
 export const listen = (subject: Subject, handler: (event: IpcRendererEvent, ...args: any[]) => void): () => void => {
-  console.log(`Listen ${ subject }`);
+  console.info(`Listen ${ subject }`);
   const _handler = (event: IpcRendererEvent, ...args: any[]) => {
-    console.log(`Received ${ subject }`, ...args);
+    console.info(`Received ${ subject }`, ...args);
     handler(event, ...args);
   };
   const unsubscribe = () => { ipcRenderer.off(subject, _handler); };

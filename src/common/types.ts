@@ -49,11 +49,15 @@ export type API = {
 
   subscribe(this, subject: Subject.CurrentProfile, handler: (profile: Profile) => void): () => void;
   get(subject: Subject.CurrentProfile): Promise<Profile>;
-  set(subject: Subject.CurrentProfile, payload: Profile): Promise<void>;
+  set(subject: Subject.CurrentProfile, payload: Profile): Promise<Profile>;
 
   subscribe(this, subject: Subject.Settings, handler: (settings: Settings) => void): () => void;
   get(subject: Subject.Settings): Promise<Settings>;
-  set(subject: Subject.Settings, payload: Settings): Promise<void>;
+  set(subject: Subject.Settings, payload: Settings): Promise<Settings>;
+
+  subscribe(this, subject: Subject.ShowSettings, handler: (visible: boolean) => void): () => void;
+  get(subject: Subject.ShowSettings): Promise<boolean>;
+  set(subject: Subject.ShowSettings, payload: boolean): Promise<boolean>;
 }
 
 export enum Subject {
@@ -61,5 +65,6 @@ export enum Subject {
   ProfileImage = 'profile-image',
   AllProfiles = 'all-profiles',
   Settings = 'settings',
+  ShowSettings = 'show-settings',
   Ping = 'ping',
 }

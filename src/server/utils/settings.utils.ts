@@ -1,6 +1,7 @@
 import { Settings } from '../../common/types';
 import { DEFAULT_SETTINGS, SETTINGS_PATH } from './meta.utils';
 import { readFileAsync, writeFileAsync } from './async.utils';
+import { existsSync } from 'fs';
 
 export const mergeDefaultSettings = (settings: Settings): Settings => ({
   general: {
@@ -17,7 +18,13 @@ export const mergeDefaultSettings = (settings: Settings): Settings => ({
   }
 });
 
+export let showSettings: boolean = false;
+export const toggleSettings = (visible: boolean) => showSettings = visible;
+
 export const loadSettings = async (): Promise<Settings> => {
+  if (!existsSync(SETTINGS_PATH)) {
+    return mergeDefaultSettings({} as Settings);
+  }
   const buffer = await readFileAsync(SETTINGS_PATH);
   const settings = JSON.parse(buffer.toString());
   return mergeDefaultSettings(settings);
