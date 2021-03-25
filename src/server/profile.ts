@@ -8,6 +8,33 @@ import { parseConfig, serializeConfig, updateConfig } from './utils/config.utils
 import { downloadGravatarImage } from './utils/gravatar.utils';
 import { CONFIG_PATH, IMAGES_PATH } from './utils/meta.utils';
 
+export const getProfiles = async (): Promise<Profile[]> => [
+  {
+    user: {
+      email: 'david@enke.dev',
+      name: 'David Enke'
+    }
+  },
+  {
+    user: {
+      email: 'post@davidenke.de',
+      name: 'David Enke'
+    }
+  },
+  {
+    user: {
+      email: 'david.enke@zalari.de',
+      name: 'David Enke'
+    }
+  },
+  {
+    user: {
+      email: 'david.enke.ext@zeiss.com',
+      name: 'David Enke'
+    }
+  }
+];
+
 export const getProfile = async (): Promise<Profile> => {
   return parseConfig(await readFileAsync(CONFIG_PATH)) as Profile;
 };
