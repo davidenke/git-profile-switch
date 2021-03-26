@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
-import { join } from 'path';
+import { extname, join } from 'path';
+import {sync as glob} from 'glob';
 import mkdirp from 'mkdirp';
 
 import { Profile } from '../common/types';
@@ -50,20 +51,21 @@ export const updateProfile = async (profile: Profile) => {
   }
 };
 
-export const getProfileImagePath = async (email?: string, size = 16, force = false): Promise<string> => {
+export const getProfileImagePath = async (email?: string, size = 16, force = false): Promise<{ path: string; mime: string; }> => {
   // use the fallback
   const fallback = join(__dirname, 'assets/icon/tray@1.png');
   if (email === undefined) {
-    return fallback;
+    return { path: fallback, mime: 'image/png' };
   }
 
   // prepare temp image path
-  const imagePath = join(IMAGES_PATH, `${ email }@${ size }.png`);
+  const [imagePath] = glob(join(IMAGES_PATH, `${ email }@${ size }.*`));
 
   // use existing image (unless regeneration is enforced)
-  if (existsSync(imagePath)) {
+  if (imagePath !== undefined) {
     if (!force) {
-      return imagePath;
+      const mime = `image/${ extname(imagePath).substr(1) }`;
+      return { path: imagePath, mime };
     }
     await deleteFileAsync(imagePath);
   }
@@ -73,16 +75,18 @@ export const getProfileImagePath = async (email?: string, size = 16, force = fal
 
   // fetch temp image from gravatar (if existing)
   try {
-    const buffer = await downloadGravatarImage(email, size);
-    await writeFileAsync(imagePath, buffer);
-    return imagePath;
+    const { buffer, mime } = await downloadGravatarImage(email, size);
+    const [, type] = mime.split('/');
+    const path = join(IMAGES_PATH, `${ email }@${ size }.${ type }`);
+    await writeFileAsync(path, buffer);
+    return { path, mime };
   } catch (e) {
-    return fallback;
+    return { path: fallback, mime: 'image/png' };
   }
 };
 
 export const getProfileImage = async (email?: string, size?: number, force = false): Promise<string> => {
-  const imagePath = await getProfileImagePath(email, size, force);
-  const imageBlob = await readFileAsync(imagePath, 'base64');
-  return `data:image/png;charset=utf-8;base64,${ imageBlob }`;
+  const { path, mime } = await getProfileImagePath(email, size, force);
+  const imageBlob = await readFileAsync(path, 'base64');
+  return `data:${ mime };charset=utf-8;base64,${ imageBlob }`;
 };

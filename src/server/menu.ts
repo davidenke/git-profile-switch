@@ -25,6 +25,6 @@ export const createMenu = async (
     } as unknown as MenuItem)),
     { type: 'separator' },
     { label: 'Settings', click: () => onSettingsClick() },
-    { role: 'quit' }
+    { label: 'Quit', role: 'quit' }
   ]);
 };

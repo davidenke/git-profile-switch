@@ -15,15 +15,16 @@ export const prepareGravatarUrl = (email?: string, size = 28, fallback = ''): st
 };
 
 // https://github.com/node-fetch/node-fetch/issues/375#issuecomment-385751664
-export const downloadGravatarImage = async (email: string, size: number): Promise<Buffer> => {
+export const downloadGravatarImage = async (email: string, size: number): Promise<{ buffer: Buffer; url: string; mime: string; }> => {
     // download
     const url = prepareGravatarUrl(email, size);
     const response = await fetch(url);
+    const mime = response.headers.get('content-type');
     const buffer = await response.buffer();
     if (response.status >= 400) {
       return Promise.reject();
     }
 
     // crop
-    return cropCircle(buffer, response.headers.get('content-type'));
+    return { url, mime: 'image/png', buffer: cropCircle(buffer, mime) };
 };

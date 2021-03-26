@@ -1,7 +1,7 @@
 import { nativeImage, Tray } from 'electron';
 
 import { Profile } from '../common/types';
-import { getProfile, getProfileImagePath } from './profile';
+import { getProfile, getProfileImage } from './profile';
 
 export const createTray = async (): Promise<Tray> => {
   const tray = new Tray(nativeImage.createEmpty());
@@ -11,6 +11,8 @@ export const createTray = async (): Promise<Tray> => {
 };
 
 export const updateTray = async (tray: Tray, profile: Profile) => {
+  const dataUrl = await getProfileImage(profile?.user?.email);
+  const image = nativeImage.createFromDataURL(dataUrl);
   tray.setTitle(` ${ profile?.user?.email }`);
-  tray.setImage(await getProfileImagePath(profile?.user?.email));
+  tray.setImage(image);
 };

@@ -1,5 +1,6 @@
 dependencies:
   electron-util: 0.14.2
+  glob: 7.1.6
   jpeg-js: 0.4.3
   md5: 2.3.0
   mkdirp: 1.0.4
@@ -13,6 +14,7 @@ devDependencies:
   '@stencil/core': 2.4.0
   '@stencil/postcss': 2.0.0_@stencil+core@2.4.0
   '@stencil/sass': 1.4.1_@stencil+core@2.4.0
+  '@types/glob': 7.1.3
   '@types/md5': 2.3.0
   '@types/mkdirp': 1.0.1
   '@types/node': 14.14.31
@@ -193,7 +195,6 @@ packages:
       '@types/minimatch': 3.0.3
       '@types/node': 14.14.31
     dev: true
-    optional: true
     resolution:
       integrity: sha512-SEYeGAIQIQX8NN6LDKprLjbrd5dARM5EXsd8GI/A5l0apYI1fGMWgPHSe4ZKL4eozlAyI+doUE9XbYS4xCkQ1w==
   /@types/md5/2.3.0:
@@ -204,7 +205,6 @@ packages:
       integrity: sha512-556YJ7ejzxIqSSxzyGGpctuZOarNZJt/zlEkhmmDc1f/slOEANHuwu2ZX7YaZ40rMiWoxt8GvAhoDpW1cmSy6A==
   /@types/minimatch/3.0.3:
     dev: true
-    optional: true
     resolution:
       integrity: sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
   /@types/mkdirp/1.0.1:
@@ -304,7 +304,6 @@ packages:
     resolution:
       integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   /balanced-match/1.0.0:
-    dev: true
     resolution:
       integrity: sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
   /base64-js/1.5.1:
@@ -324,7 +323,6 @@ packages:
     dependencies:
       balanced-match: 1.0.0
       concat-map: 0.0.1
-    dev: true
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
   /browserslist/4.16.3:
@@ -457,7 +455,6 @@ packages:
     resolution:
       integrity: sha1-AWLsLZNR9d3VmpICy6k1NmpyUIA=
   /concat-map/0.0.1:
-    dev: true
     resolution:
       integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
   /concat-stream/1.6.2:
@@ -863,7 +860,6 @@ packages:
     resolution:
       integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
   /fs.realpath/1.0.0:
-    dev: true
     resolution:
       integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
   /fsevents/2.3.2:
@@ -930,7 +926,6 @@ packages:
       minimatch: 3.0.4
       once: 1.4.0
       path-is-absolute: 1.0.1
-    dev: true
     resolution:
       integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
   /global-agent/2.1.12:
@@ -1027,11 +1022,9 @@ packages:
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
-    dev: true
     resolution:
       integrity: sha1-Sb1jMdfQLQwJvJEKEHW6gWW1bfk=
   /inherits/2.0.4:
-    dev: true
     resolution:
       integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
   /ini/1.3.8:
@@ -1308,7 +1301,6 @@ packages:
   /minimatch/3.0.4:
     dependencies:
       brace-expansion: 1.1.11
-    dev: true
     resolution:
       integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
   /minimist/1.2.5:
@@ -1436,7 +1428,6 @@ packages:
   /once/1.4.0:
     dependencies:
       wrappy: 1.0.2
-    dev: true
     resolution:
       integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
   /p-cancelable/1.1.0:
@@ -1499,7 +1490,6 @@ packages:
     resolution:
       integrity: sha1-zg6+ql94yxiSXqfYENe1mwEP1RU=
   /path-is-absolute/1.0.1:
-    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
@@ -2007,7 +1997,6 @@ packages:
     resolution:
       integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==
   /wrappy/1.0.2:
-    dev: true
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
   /xmlbuilder/9.0.7:
@@ -2047,6 +2036,7 @@ specifiers:
   '@stencil/core': 2.4.0
   '@stencil/postcss': 2.0.0
   '@stencil/sass': 1.4.1
+  '@types/glob': 7.1.3
   '@types/md5': 2.3.0
   '@types/mkdirp': 1.0.1
   '@types/node': 14.14.31
@@ -2056,6 +2046,7 @@ specifiers:
   electron: 12.0.0
   electron-packager: 15.2.0
   electron-util: 0.14.2
+  glob: 7.1.6
   jpeg-js: 0.4.3
   md5: 2.3.0
   mkdirp: 1.0.4
