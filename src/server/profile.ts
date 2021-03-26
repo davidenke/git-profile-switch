@@ -1,7 +1,8 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { extname, join } from 'path';
-import {sync as glob} from 'glob';
+import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
+import Store from 'electron-store';
 
 import { Profile } from '../common/types';
 import { deleteFileAsync, readFileAsync, writeFileAsync } from './utils/async.utils';
@@ -9,32 +10,17 @@ import { parseConfig, serializeConfig, updateConfig } from './utils/config.utils
 import { downloadGravatarImage } from './utils/gravatar.utils';
 import { CONFIG_PATH, IMAGES_PATH } from './utils/meta.utils';
 
-export const getProfiles = async (): Promise<Profile[]> => [
-  {
-    user: {
-      email: 'david@enke.dev',
-      name: 'David Enke'
-    }
-  },
-  {
-    user: {
-      email: 'post@davidenke.de',
-      name: 'David Enke'
-    }
-  },
-  {
-    user: {
-      email: 'david.enke@zalari.de',
-      name: 'David Enke'
-    }
-  },
-  {
-    user: {
-      email: 'david.enke.ext@zeiss.com',
-      name: 'David Enke'
-    }
+const store = new Store<{ profiles: Profile[] }>({
+  defaults: {
+    profiles: [
+      parseConfig(readFileSync(CONFIG_PATH)) as Profile
+    ]
   }
-];
+});
+
+export const getProfiles = async (): Promise<Profile[]> => {
+  return store.get('profiles');
+};
 
 export const getProfile = async (): Promise<Profile> => {
   return parseConfig(await readFileAsync(CONFIG_PATH)) as Profile;

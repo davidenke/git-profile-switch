@@ -26,6 +26,7 @@
     "name": "David Enke"
   },
   "dependencies": {
+    "electron-store": "7.0.2",
     "electron-util": "0.14.2",
     "glob": "7.1.6",
     "jpeg-js": "0.4.3",
