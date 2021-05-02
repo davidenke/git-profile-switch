@@ -19,7 +19,6 @@ export const createWindow = async (isDevelopment = false, port = 3333): Promise<
       devTools: isDevelopment,
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
       preload: join(__dirname, 'preload.js'), // use a preload script
       spellcheck: false // disable spellcheck
     }
