@@ -19,7 +19,8 @@ export default defineConfig({
     next(message);
   },
   external: [
-    'electron'
+    'electron',
+    'glob'
   ],
   plugins: [
     commonjs(),
