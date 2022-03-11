@@ -4,7 +4,7 @@ import { readFileAsync, writeFileAsync } from './async.utils';
 import { existsSync } from 'fs';
 import { openWithCommand } from '../../ui/utils/platform.utils';
 
-export const mergeDefaultSettings = (settings: Settings): Settings => ({
+export const mergeDefaultSettings = (settings: Partial<Settings>): Settings => ({
   general: {
     ...DEFAULT_SETTINGS.general,
     ...settings.general,
@@ -24,10 +24,15 @@ export const toggleSettings = (visible: boolean) => (showSettings = visible);
 
 export const loadSettings = async (): Promise<Settings> => {
   if (!existsSync(SETTINGS_PATH)) {
-    return mergeDefaultSettings({} as Settings);
+    return mergeDefaultSettings({});
   }
   const buffer = await readFileAsync(SETTINGS_PATH);
-  const settings = JSON.parse(buffer.toString());
+  let settings = {};
+  try {
+    settings = JSON.parse(buffer.toString());
+  } catch (error) {
+    // do not handle invalid settings file
+  }
   return mergeDefaultSettings(settings);
 };
 

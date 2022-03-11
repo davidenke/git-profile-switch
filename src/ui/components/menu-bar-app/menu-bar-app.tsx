@@ -34,6 +34,7 @@ export class MenuBarApp implements ComponentInterface {
     // subscribe to subjects
     this._subscriptions.add(window.api.subscribe(Subject.AllProfiles, profiles => this._profiles = profiles));
     this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => this._isEditing = visible));
+    this._subscriptions.add(window.api.subscribe(Subject.Settings, settings => this._settings = settings));
     this._subscriptions.add(window.api.subscribe(Subject.CurrentProfile, async profile => {
       this._currentProfile = profile;
       this._currentImage = await window.api.get(Subject.ProfileImage, {

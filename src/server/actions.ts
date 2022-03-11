@@ -2,7 +2,7 @@ import { watch } from 'fs';
 import { BrowserWindow, ipcMain, Tray } from 'electron';
 
 import { Subject } from '../common/types';
-import { CONFIG_PATH } from './utils/meta.utils';
+import { CONFIG_PATH, SETTINGS_PATH } from './utils/meta.utils';
 import { generateId } from './utils/request.utils';
 import { loadSettings, openSettings, saveSettings, showSettings, toggleSettings } from './utils/settings.utils';
 
@@ -68,5 +68,14 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     const profile = await getProfile();
     await updateTray(tray, profile);
     window.webContents.send(Subject.CurrentProfile, { id: generateId(), type: 'get', payload: profile });
+  });
+
+  watch(SETTINGS_PATH, async event => {
+    if (event !== 'change') {
+      return;
+    }
+  
+    const settings = await loadSettings();
+    window.webContents.send(Subject.Settings, { id: generateId(), type: 'get', payload: settings });
   });
 };
