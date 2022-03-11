@@ -17,9 +17,9 @@
 
 | Event           | Description | Type                                                                                                                                               |
 | --------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `changed`       |             | `CustomEvent<{ general: { autoStart: boolean; theme: { overrideSystem: boolean; prefer?: Theme; }; }; profiles: { [email: string]: Profile; }; }>` |
 | `open`          |             | `CustomEvent<void>`                                                                                                                                |
 | `themeSelected` |             | `CustomEvent<"dark" \| "light">`                                                                                                                   |
-| `updated`       |             | `CustomEvent<{ general: { autoStart: boolean; theme: { overrideSystem: boolean; prefer?: Theme; }; }; profiles: { [email: string]: Profile; }; }>` |
 
 
 ## Dependencies

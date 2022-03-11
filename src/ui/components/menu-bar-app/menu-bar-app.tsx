@@ -27,8 +27,15 @@ export class MenuBarApp implements ComponentInterface {
   @State()
   private _currentImage?: string;
 
+  @State()
+  private _profileAlreadyExisting = false;
+
   private get _isEditing(): boolean {
     return this._editingProfileId !== undefined;
+  }
+
+  private get _isNewProfile(): boolean {
+    return !(this._editingProfileId in this._settings.profiles);
   }
 
   private async _updateSettings(settings: Settings) {
@@ -87,9 +94,41 @@ export class MenuBarApp implements ComponentInterface {
     document.body.setAttribute('theme', theme);
   }
 
-  updateProfile(profileId: string, profile: Profile) {
-    this._settings.profiles[profileId] = profile;
+  async removeProfile(profile: Profile) {
+    // remove the profile
+    delete this._settings.profiles[profile.user.email];
+    // check if we removed the selected one
+    if (!(this._currentProfileId in this._settings.profiles)) {
+      // so already select the new "first" one
+      const [firstOrNone] = Object.keys(this._settings.profiles);
+      if (firstOrNone !== undefined) {
+        await this.selectProfile(firstOrNone);
+      }
+    }
+    // store the altered settings
     this.updateSettings(this._settings);
+    // close settings dialog
+    await window.api.set(Subject.HideSettings);
+  }
+
+  // TODO: better split update and create
+  async updateProfile(profile: Profile) {
+    // do not alter existing profiles
+    if (profile.user.email in this._settings.profiles && profile.user.email !== this._editingProfileId) {
+      this._profileAlreadyExisting = true;
+      return;
+    }
+    this._profileAlreadyExisting = false;
+    // remove existing first
+    delete this._settings.profiles[this._editingProfileId];
+    // add updated contents "as new"
+    this._editingProfileId = profile.user.email;
+    this._settings.profiles[this._editingProfileId] = profile;
+    // persist changes
+    await this.updateSettings(this._settings);
+    await this.selectProfile(profile.user.email);
+    // close settings dialog
+    window.api.set(Subject.HideSettings);
   }
 
   openSettings() {
@@ -107,21 +146,25 @@ export class MenuBarApp implements ComponentInterface {
           <gps-menu-bar-icon-settings onClick={() => this.toggleSettings()} />
         </gps-menu-bar-info>
         <gps-menu-bar-switch
-          currentProfileId={this._currentProfileId}
+          selectedProfileId={this._isEditing ? this._editingProfileId : this._currentProfileId}
           disabled={false || this._isEditing}
           items={Object.keys(this._settings.profiles)}
           onSwitch={({ detail }) => this.selectProfile(detail)}
         />
-        {this._editingProfileId && [
+        {this._isEditing && [
           <gps-menu-bar-profile
-            profile={this._settings.profiles[this._editingProfileId]}
-            onUpdated={({ detail }) => this.updateProfile(this._editingProfileId, detail)}
+            alreadyExisting={this._profileAlreadyExisting}
+            isNew={this._isNewProfile}
+            profile={this._settings.profiles[this._editingProfileId] || { user: { email: '' } }}
+            onChanged={() => this._profileAlreadyExisting = false}
+            onUpdate={({ detail }) => this.updateProfile(detail)}
+            onRemove={({ detail }) => this.removeProfile(detail)}
           />,
           <gps-menu-bar-settings
             disabled={this._isIdle}
             settings={this._settings}
             onThemeSelected={({ detail }) => this.setTheme(detail)}
-            onUpdated={({ detail }) => this.updateSettings(detail)}
+            onChanged={({ detail }) => this.updateSettings(detail)}
             onOpen={() => this.openSettings()}
           />,
         ]}

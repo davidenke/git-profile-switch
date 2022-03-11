@@ -1,5 +1,5 @@
 import { watch } from 'fs';
-import { BrowserWindow, ipcMain, Tray } from 'electron';
+import { BrowserWindow, ipcMain, Menu, Tray } from 'electron';
 
 import { Subject } from '../common/types';
 import { CONFIG_PATH, SETTINGS_PATH } from './utils/meta.utils';
@@ -8,8 +8,9 @@ import { loadSettings, openSettings, saveSettings, showSettings, hideSettings, e
 
 import { updateTray } from './tray';
 import { getProfile, getProfileImage, getProfiles, updateProfile } from './profile';
+import { updateMenu } from './menu';
 
-export const registerActions = (tray: Tray, window: BrowserWindow) => {
+export const registerActions = (tray: Tray, window: BrowserWindow, onMenuUpdated: (menu: Menu) => void) => {
   ipcMain.on(Subject.AllProfiles, async (_, { id, type }) => {
     const payload = await getProfiles();
     window.webContents.send(Subject.AllProfiles, { id, type, payload });
@@ -42,6 +43,9 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
       window.webContents.send(Subject.Settings, { id, type, payload: settings });
     } else if (type === 'set' && payload !== undefined) {
       await saveSettings(payload);
+      const profiles = await getProfiles();
+      const currentProfile = await getProfile();
+      onMenuUpdated(await updateMenu(profiles, currentProfile));
       window.webContents.send(Subject.Settings, { id, type, payload });
     }
   });

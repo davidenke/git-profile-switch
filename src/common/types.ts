@@ -1,7 +1,7 @@
 export type Profile = {
   user: {
-    name: string;
     email: string;
+    name?: string;
     signingKey?: string;
   };
   core?: {

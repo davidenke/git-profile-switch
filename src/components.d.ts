@@ -17,6 +17,8 @@ export namespace Components {
         "profile"?: Profile;
     }
     interface GpsMenuBarProfile {
+        "alreadyExisting": boolean;
+        "isNew": boolean;
         "profile": Profile;
     }
     interface GpsMenuBarSettings {
@@ -24,9 +26,9 @@ export namespace Components {
         "settings": Settings;
     }
     interface GpsMenuBarSwitch {
-        "currentProfileId"?: string;
         "disabled": boolean;
         "items": string[];
+        "selectedProfileId": string;
     }
 }
 declare global {
@@ -86,21 +88,25 @@ declare namespace LocalJSX {
         "profile"?: Profile;
     }
     interface GpsMenuBarProfile {
-        "onUpdated"?: (event: CustomEvent<Profile>) => void;
+        "alreadyExisting"?: boolean;
+        "isNew"?: boolean;
+        "onChanged"?: (event: CustomEvent<Profile>) => void;
+        "onRemove"?: (event: CustomEvent<Profile>) => void;
+        "onUpdate"?: (event: CustomEvent<Profile>) => void;
         "profile": Profile;
     }
     interface GpsMenuBarSettings {
         "disabled"?: boolean;
+        "onChanged"?: (event: CustomEvent<Settings>) => void;
         "onOpen"?: (event: CustomEvent<void>) => void;
         "onThemeSelected"?: (event: CustomEvent<Theme>) => void;
-        "onUpdated"?: (event: CustomEvent<Settings>) => void;
         "settings": Settings;
     }
     interface GpsMenuBarSwitch {
-        "currentProfileId"?: string;
         "disabled"?: boolean;
         "items"?: string[];
         "onSwitch"?: (event: CustomEvent<string>) => void;
+        "selectedProfileId"?: string;
     }
     interface IntrinsicElements {
         "gps-menu-bar-app": GpsMenuBarApp;

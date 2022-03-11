@@ -10,7 +10,7 @@
 input,
 section {
   &:not(:last-child) {
-    margin-bottom: utils.base-size(.75);
+    margin-bottom: utils.base-size(0.75);
   }
 }
 
@@ -21,6 +21,15 @@ input {
   width: 100%;
 
   @include utils.with-theme(dark) {
-    filter: invert(.85);
+    filter: invert(0.85);
+  }
+
+  &.error {
+    border-style: solid inset solid solid;
+    border-color: #df4545;
+
+    @include utils.with-theme(dark) {
+      border-color: #40d4bc;
+    }
   }
 }

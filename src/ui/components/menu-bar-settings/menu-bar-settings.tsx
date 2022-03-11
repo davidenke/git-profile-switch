@@ -11,7 +11,7 @@ export class MenuBarSettings implements ComponentInterface {
   private readonly _unsubscribe = new Set<() => void>();
 
   @Event()
-  readonly updated: EventEmitter<Settings>;
+  readonly changed: EventEmitter<Settings>;
 
   @Event()
   readonly themeSelected: EventEmitter<Theme>;
@@ -30,18 +30,18 @@ export class MenuBarSettings implements ComponentInterface {
 
   private _handleAutoStart({ target: { checked: autoStart } }: EventWithTarget<HTMLInputElement>) {
     this.settings = { ...this.settings, general: { ...this.settings.general, autoStart } };
-    this.updated.emit(this.settings);
+    this.changed.emit(this.settings);
   }
 
   private _handleOverrideSystem({ target: { checked: overrideSystem } }: EventWithTarget<HTMLInputElement>) {
     this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general.theme, overrideSystem } } };
-    this.updated.emit(this.settings);
+    this.changed.emit(this.settings);
     this.themeSelected.emit(this._selectedTheme());
   }
 
   private _handlePrefer({ target: { value } }: EventWithTarget<HTMLSelectElement>) {
     this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general.theme, prefer: value as Theme } } };
-    this.updated.emit(this.settings);
+    this.changed.emit(this.settings);
     this.themeSelected.emit(this._selectedTheme());
   }
 

@@ -32,7 +32,12 @@ app.dock.hide();
 
 // Initialize tray and detail window
 app.on('ready', async () => {
+  const profiles = await getProfiles();
+  const currentProfile = await getProfile();
+
   menu = await createMenu(
+    profiles,
+    currentProfile,
     // activate clicked profile
     profile => {
       updateProfile(profile);
@@ -68,5 +73,8 @@ app.on('ready', async () => {
   tray.setContextMenu(menu);
 
   // register listeners for ipc events
-  registerActions(tray, window);
+  registerActions(tray, window, updatedMenu => {
+    menu = updatedMenu;
+    tray.setContextMenu(menu);
+  });
 });

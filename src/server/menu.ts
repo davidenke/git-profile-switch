@@ -1,14 +1,12 @@
 import { Menu, MenuItem, nativeImage, NativeImage } from 'electron';
-import { getProfile, getProfileImage, getProfiles } from './profile';
+import { getProfileImage } from './profile';
 import { Profile } from '../common/types';
 
-export const createMenu = async (
-  onProfileClick: (profile: Profile) => void = () => null,
-  onCreateClick: () => void = () => null,
-  onSettingsClick: () => void = () => null
-): Promise<Menu> => {
-  const profiles = await getProfiles();
-  const currentProfile = await getProfile();
+let profileClickAction = (_profile: Profile): void => null;
+let createClickAction = (): void => null;
+let settingsClickAction = (): void => null;
+
+const prepareMenu = async (profiles: Profile[], currentProfile: Profile): Promise<Menu> => {
   const icons: { [email: string]: NativeImage; } = {};
 
   for await (const { user: { email } } of profiles) {
@@ -22,11 +20,30 @@ export const createMenu = async (
       icon: icons[profile.user.email],
       type: 'checkbox',
       checked: profile.user.email === currentProfile.user.email,
-      click: () => onProfileClick(profile)
+      click: () => profileClickAction(profile)
     } as unknown as MenuItem)),
     { type: 'separator' },
-    { label: 'Create new profile', click: () => onCreateClick() },
-    { label: 'Settings', click: () => onSettingsClick() },
+    { label: 'Create new profile', click: () => createClickAction() },
+    { label: 'Settings', click: () => settingsClickAction() },
     { label: 'Quit', role: 'quit' }
   ]);
+};
+
+
+export const updateMenu = async (profiles: Profile[], currentProfile: Profile): Promise<Menu> => {
+  return prepareMenu(profiles, currentProfile);
+}
+
+export const createMenu = async (
+  profiles: Profile[],
+  currentProfile: Profile,
+  onProfileClick: typeof profileClickAction,
+  onCreateClick: typeof createClickAction,
+  onSettingsClick: typeof settingsClickAction
+): Promise<Menu> => {
+  profileClickAction = onProfileClick;
+  createClickAction = onCreateClick;
+  settingsClickAction = onSettingsClick;
+
+  return prepareMenu(profiles, currentProfile);
 };

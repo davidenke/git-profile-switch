@@ -7,16 +7,20 @@
 
 ## Properties
 
-| Property               | Attribute | Description | Type                                                                                                                                                       | Default     |
-| ---------------------- | --------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `profile` _(required)_ | --        |             | `{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }` | `undefined` |
+| Property               | Attribute          | Description | Type                                                                                                                                                        | Default     |
+| ---------------------- | ------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `alreadyExisting`      | `already-existing` |             | `boolean`                                                                                                                                                   | `false`     |
+| `isNew`                | `is-new`           |             | `boolean`                                                                                                                                                   | `false`     |
+| `profile` _(required)_ | --                 |             | `{ user: { email: string; name?: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }` | `undefined` |
 
 
 ## Events
 
-| Event     | Description | Type                                                                                                                                                                    |
-| --------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `updated` |             | `CustomEvent<{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }>` |
+| Event     | Description | Type                                                                                                                                                                     |
+| --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `changed` |             | `CustomEvent<{ user: { email: string; name?: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }>` |
+| `remove`  |             | `CustomEvent<{ user: { email: string; name?: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }>` |
+| `update`  |             | `CustomEvent<{ user: { email: string; name?: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }>` |
 
 
 ## Dependencies
