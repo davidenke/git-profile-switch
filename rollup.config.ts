@@ -20,6 +20,7 @@ export default defineConfig({
   },
   external: [
     'electron',
+    'electron-reload',
     'glob'
   ],
   plugins: [

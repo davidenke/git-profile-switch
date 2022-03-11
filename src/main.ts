@@ -1,4 +1,7 @@
+import { resolve } from 'path';
+
 import { app, BrowserWindow, Menu, Tray } from 'electron';
+import { default as electronReload } from 'electron-reload';
 import { is } from 'electron-util';
 
 import { registerActions } from './server/actions';
@@ -6,6 +9,13 @@ import { updateProfile } from './server/profile';
 import { createMenu } from './server/menu';
 import { createTray } from './server/tray';
 import { createWindow, toggleWindow } from './server/window';
+
+// configure reload behaviour in development environment
+// https://github.com/yan-foto/electron-reload
+if (is.development) {
+  const electron = resolve(__dirname, '../', 'node_modules', '.bin', 'electron');
+  electronReload(__dirname, { electron });
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -21,10 +31,10 @@ app.on('ready', async () => {
   menu = await createMenu(
     profile => {
       updateProfile(profile);
-      menu.items.forEach(item => item.checked = item.label === profile.user.email);
+      menu.items.forEach(item => (item.checked = item.label === profile.user.email));
       tray.setContextMenu(menu);
     },
-    () => toggleWindow(tray, window)
+    () => toggleWindow(tray, window),
   );
   tray = await createTray();
   window = await createWindow(is.development, 3333);
@@ -38,4 +48,3 @@ app.on('ready', async () => {
   // register listeners for ipc events
   registerActions(tray, window);
 });
-
