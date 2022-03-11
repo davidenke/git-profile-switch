@@ -20,13 +20,12 @@ export default defineConfig({
   },
   external: [
     'electron',
-    'electron-reload',
-    'glob'
+    'electron-reload'
   ],
   plugins: [
     commonjs(),
     json(),
-    nodeResolve({ preferBuiltins: true, browser: false }),
+    nodeResolve({ preferBuiltins: false, browser: false }),
     typescript({ tsconfig: './tsconfig.electron.json' })
   ],
   preserveEntrySignatures: 'strict'

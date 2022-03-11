@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import { extname, join } from 'path';
-import { sync as glob } from 'glob';
+import { sync as glob } from 'fast-glob';
 import mkdirp from 'mkdirp';
 
 import { Profile } from '../common/types';
