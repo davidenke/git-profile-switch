@@ -4,6 +4,7 @@ import { Profile } from '../common/types';
 
 export const createMenu = async (
   onProfileClick: (profile: Profile) => void = () => null,
+  onCreateClick: () => void = () => null,
   onSettingsClick: () => void = () => null
 ): Promise<Menu> => {
   const profiles = await getProfiles();
@@ -24,6 +25,7 @@ export const createMenu = async (
       click: () => onProfileClick(profile)
     } as unknown as MenuItem)),
     { type: 'separator' },
+    { label: 'Create new profile', click: () => onCreateClick() },
     { label: 'Settings', click: () => onSettingsClick() },
     { label: 'Quit', role: 'quit' }
   ]);

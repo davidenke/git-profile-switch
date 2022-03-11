@@ -55,8 +55,8 @@ export const getWindowPosition = (tray: Tray, window: BrowserWindow) => {
   return { x, y };
 };
 
-export const toggleWindow = (tray: Tray, window: BrowserWindow) => {
-  window.isVisible() ? window.hide() : showWindow(tray, window);
+export const closeWindow = (window: BrowserWindow) => {
+  window.hide();
 };
 
 export const showWindow = (tray: Tray, window: BrowserWindow) => {

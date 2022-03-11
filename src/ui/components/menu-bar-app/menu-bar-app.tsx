@@ -16,7 +16,7 @@ export class MenuBarApp implements ComponentInterface {
   private _isIdle = false;
 
   @State()
-  private _isEditing = false;
+  private _editingProfileId?: string;
 
   @State()
   private _settings: Settings;
@@ -27,8 +27,8 @@ export class MenuBarApp implements ComponentInterface {
   @State()
   private _currentImage?: string;
 
-  private get _currentProfile(): Profile {
-    return this._settings.profiles[this._currentProfileId];
+  private get _isEditing(): boolean {
+    return this._editingProfileId !== undefined;
   }
 
   private async _updateSettings(settings: Settings) {
@@ -41,7 +41,8 @@ export class MenuBarApp implements ComponentInterface {
 
   async componentWillLoad() {
     // subscribe to subjects
-    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => (this._isEditing = visible)));
+    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, profileId => (this._editingProfileId = profileId)));
+    this._subscriptions.add(window.api.subscribe(Subject.HideSettings, () => (this._editingProfileId = undefined)));
     this._subscriptions.add(window.api.subscribe(Subject.Settings, settings => (this._settings = settings)));
     this._subscriptions.add(
       window.api.subscribe(Subject.CurrentProfile, async profile => {
@@ -63,8 +64,8 @@ export class MenuBarApp implements ComponentInterface {
     this._subscriptions.forEach(unsubscribe => unsubscribe());
   }
 
-  async selectProfile(email: string) {
-    const profile = Object.values(this._settings.profiles).find(profile => profile?.user?.email === email);
+  async selectProfile(profileId: string) {
+    const profile = Object.values(this._settings.profiles).find(profile => profile?.user?.email === profileId);
     if (profile !== undefined) {
       this._isIdle = true;
       await window.api.set(Subject.CurrentProfile, profile);
@@ -73,21 +74,21 @@ export class MenuBarApp implements ComponentInterface {
   }
 
   async toggleSettings() {
-    this._isEditing = !this._isEditing;
-    await window.api.set(Subject.ShowSettings, this._isEditing);
+    if (this._isEditing) {
+      this._editingProfileId = undefined;
+      await window.api.set(Subject.HideSettings);
+    } else {
+      this._editingProfileId = this._currentProfileId;
+      await window.api.set(Subject.ShowSettings, this._editingProfileId);
+    }
   }
 
   setTheme(theme: Theme) {
     document.body.setAttribute('theme', theme);
   }
 
-  updateCurrentProfile(profile: Profile) {
-    // remove existing
-    delete this._settings.profiles[this._currentProfileId];
-    // add modified
-    this._currentProfileId = profile.user.email;
-    this._settings.profiles[this._currentProfileId] = profile;
-    // submit changes
+  updateProfile(profileId: string, profile: Profile) {
+    this._settings.profiles[profileId] = profile;
     this.updateSettings(this._settings);
   }
 
@@ -95,26 +96,35 @@ export class MenuBarApp implements ComponentInterface {
     window.api.get(Subject.OpenSettings);
   }
 
+  // prettier-ignore
   render() {
     return (
       <Host>
-        <gps-menu-bar-info avatarSize={this._avatarSize} profile={this._currentProfile} image={this._currentImage}>
+        <gps-menu-bar-info
+          avatarSize={this._avatarSize}
+          profile={this._settings.profiles[this._currentProfileId]} image={this._currentImage}
+        >
           <gps-menu-bar-icon-settings onClick={() => this.toggleSettings()} />
         </gps-menu-bar-info>
         <gps-menu-bar-switch
           currentProfileId={this._currentProfileId}
-          disabled={false /*|| this._isEditing*/}
+          disabled={false || this._isEditing}
           items={Object.keys(this._settings.profiles)}
           onSwitch={({ detail }) => this.selectProfile(detail)}
         />
-        <gps-menu-bar-profile profile={this._currentProfile} onUpdated={({ detail }) => this.updateCurrentProfile(detail)} />
-        <gps-menu-bar-settings
-          disabled={this._isIdle}
-          settings={this._settings}
-          onThemeSelected={({ detail }) => this.setTheme(detail)}
-          onUpdated={({ detail }) => this.updateSettings(detail)}
-          onOpen={() => this.openSettings()}
-        />
+        {this._editingProfileId && [
+          <gps-menu-bar-profile
+            profile={this._settings.profiles[this._editingProfileId]}
+            onUpdated={({ detail }) => this.updateProfile(this._editingProfileId, detail)}
+          />,
+          <gps-menu-bar-settings
+            disabled={this._isIdle}
+            settings={this._settings}
+            onThemeSelected={({ detail }) => this.setTheme(detail)}
+            onUpdated={({ detail }) => this.updateSettings(detail)}
+            onOpen={() => this.openSettings()}
+          />,
+        ]}
       </Host>
     );
   }

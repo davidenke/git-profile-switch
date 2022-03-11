@@ -3,6 +3,8 @@ import { DEFAULT_SETTINGS, SETTINGS_PATH } from './meta.utils';
 import { readFileAsync, writeFileAsync } from './async.utils';
 import { existsSync } from 'fs';
 import { openWithCommand } from '../../ui/utils/platform.utils';
+import { BrowserWindow } from 'electron';
+import { WINDOW_WIDTH, WINDOW_HEIGHT_EXPANDED, WINDOW_HEIGHT_DEFAULT } from '../window';
 
 export const mergeDefaultSettings = (settings: Partial<Settings>): Settings => ({
   general: {
@@ -19,8 +21,15 @@ export const mergeDefaultSettings = (settings: Partial<Settings>): Settings => (
   },
 });
 
-export let showSettings: boolean = false;
-export const toggleSettings = (visible: boolean) => (showSettings = visible);
+export let editingProfileId: string | undefined;
+export const showSettings = (window: BrowserWindow, profileId: string) => {
+  editingProfileId = profileId;
+  window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT_EXPANDED, true);
+};
+export const hideSettings = (window: BrowserWindow) => {
+  editingProfileId = undefined;
+  window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT_DEFAULT, true);
+};
 
 export const loadSettings = async (): Promise<Settings> => {
   if (!existsSync(SETTINGS_PATH)) {

@@ -4,11 +4,10 @@ import { BrowserWindow, ipcMain, Tray } from 'electron';
 import { Subject } from '../common/types';
 import { CONFIG_PATH, SETTINGS_PATH } from './utils/meta.utils';
 import { generateId } from './utils/request.utils';
-import { loadSettings, openSettings, saveSettings, showSettings, toggleSettings } from './utils/settings.utils';
+import { loadSettings, openSettings, saveSettings, showSettings, hideSettings, editingProfileId } from './utils/settings.utils';
 
 import { updateTray } from './tray';
 import { getProfile, getProfileImage, getProfiles, updateProfile } from './profile';
-import { WINDOW_HEIGHT_DEFAULT, WINDOW_HEIGHT_EXPANDED, WINDOW_WIDTH } from './window';
 
 export const registerActions = (tray: Tray, window: BrowserWindow) => {
   ipcMain.on(Subject.AllProfiles, async (_, { id, type }) => {
@@ -49,11 +48,19 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
 
   ipcMain.on(Subject.ShowSettings, async (_, { id, type, payload }) => {
     if (type === 'get') {
-      window.webContents.send(Subject.ShowSettings, { id, type, payload: showSettings });
-    } else if (type === 'set' && payload !== undefined) {
-      toggleSettings(payload);
-      window.setSize(WINDOW_WIDTH, payload ? WINDOW_HEIGHT_EXPANDED : WINDOW_HEIGHT_DEFAULT, true);
+      window.webContents.send(Subject.ShowSettings, { id, type, payload: editingProfileId });
+    } else if (type === 'set') {
+      showSettings(window, payload);
       window.webContents.send(Subject.ShowSettings, { id, type, payload });
+    }
+  });
+
+  ipcMain.on(Subject.HideSettings, async (_, { id, type }) => {
+    if (type === 'get') {
+      window.webContents.send(Subject.HideSettings, { id, type });
+    } else if (type === 'set') {
+      hideSettings(window);
+      window.webContents.send(Subject.ShowSettings, { id, type });
     }
   });
 
@@ -74,7 +81,7 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     if (event !== 'change') {
       return;
     }
-  
+
     const settings = await loadSettings();
     window.webContents.send(Subject.Settings, { id: generateId(), type: 'get', payload: settings });
   });
