@@ -34,13 +34,13 @@ export class MenuBarSettings implements ComponentInterface {
   }
 
   private _handleOverrideSystem({ target: { checked: overrideSystem } }: EventWithTarget<HTMLInputElement>) {
-    this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general.theme, overrideSystem } } };
+    this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general?.theme, overrideSystem } } };
     this.changed.emit(this.settings);
     this.themeSelected.emit(this._selectedTheme());
   }
 
   private _handlePrefer({ target: { value } }: EventWithTarget<HTMLSelectElement>) {
-    this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general.theme, prefer: value as Theme } } };
+    this.settings = { ...this.settings, general: { ...this.settings.general, theme: { ...this.settings.general?.theme, prefer: value as Theme } } };
     this.changed.emit(this.settings);
     this.themeSelected.emit(this._selectedTheme());
   }
@@ -50,7 +50,7 @@ export class MenuBarSettings implements ComponentInterface {
   }
 
   private _selectedTheme(): Theme {
-    const { overrideSystem = false, prefer } = this.settings.general.theme;
+    const { overrideSystem = false, prefer } = this.settings.general?.theme;
     return overrideSystem ? prefer : this._systemTheme;
   }
 
@@ -88,11 +88,11 @@ export class MenuBarSettings implements ComponentInterface {
             <span class="label">override system theme</span>
           </label>
           <label>
-            <select disabled={this.disabled || !this.settings.general.theme.overrideSystem} onChange={(event: EventWithTarget<HTMLSelectElement>) => this._handlePrefer(event)}>
-              <option value="dark" selected={this.settings.general.theme.prefer === 'dark'}>
+            <select disabled={this.disabled || !this.settings.general?.theme?.overrideSystem} onChange={(event: EventWithTarget<HTMLSelectElement>) => this._handlePrefer(event)}>
+              <option value="dark" selected={this.settings.general?.theme?.prefer === 'dark'}>
                 dark
               </option>
-              <option value="light" selected={this.settings.general.theme.prefer === 'light'}>
+              <option value="light" selected={this.settings.general?.theme?.prefer === 'light'}>
                 light
               </option>
             </select>

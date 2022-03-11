@@ -12,7 +12,7 @@ export const mergeDefaultSettings = (settings: Partial<Settings>): Settings => (
     ...settings.general,
     theme: {
       ...DEFAULT_SETTINGS.general.theme,
-      ...settings.general.theme,
+      ...settings.general?.theme,
     },
   },
   profiles: {
