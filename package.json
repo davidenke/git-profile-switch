@@ -4,7 +4,7 @@
   "description": "Mac menu bar switch for git profiles.",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "shx rm -rf dist",
+    "clean": "shx rm -rf dist bundle",
     "prebuild": "run-s clean",
     "build:server": "rollup --config rollup.config.ts",
     "build:ui": "stencil build --docs",
