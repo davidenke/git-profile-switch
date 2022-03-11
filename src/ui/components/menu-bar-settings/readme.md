@@ -18,6 +18,7 @@
 
 | Event           | Description | Type                                                                                                                                 |
 | --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `open`          |             | `CustomEvent<void>`                                                                                                                  |
 | `themeSelected` |             | `CustomEvent<"dark" \| "light">`                                                                                                     |
 | `updated`       |             | `CustomEvent<{ general: { autoStart: boolean; }; git: { editor?: string; }; theme: { overrideSystem: boolean; prefer?: Theme; }; }>` |
 

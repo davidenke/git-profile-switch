@@ -80,6 +80,10 @@ export class MenuBarApp implements ComponentInterface {
     this._isIdle = false;
   }
 
+  openSettings() {
+    window.api.get(Subject.OpenSettings);
+  }
+
   render() {
     return [
       <gps-menu-bar-info avatarSize={ this._avatarSize }
@@ -103,6 +107,7 @@ export class MenuBarApp implements ComponentInterface {
                              visible={ this._isEditing }
                              onThemeSelected={ ({ detail }) => this.setTheme(detail) }
                              onUpdated={ ({ detail }) => this.updateSettings(detail) }
+                             onOpen={ () => this.openSettings() }
       />,
     ];
   }

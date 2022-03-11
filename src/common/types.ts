@@ -12,14 +12,14 @@ export type Settings = {
   theme: {
     overrideSystem: boolean;
     prefer?: Theme;
-  }
+  };
 };
 
 export type Config = {
   [group: string]: {
     [key: string]: string;
   };
-}
+};
 
 export type Profile = {
   user: {
@@ -36,18 +36,19 @@ export type Profile = {
   };
 };
 
-export type EventWithTarget<T extends Element, E = Event> = E & { target: T; };
+export type EventWithTarget<T extends Element, E extends Event = Event> = E & { target: T };
 
 export type RequestType = 'get' | 'set';
 
 export type API = {
   get(subject: Subject.Ping): Promise<number>;
+  get(subject: Subject.OpenSettings): void;
 
   subscribe(this, subject: Subject.AllProfiles, handler: (profiles: Profile[]) => void): () => void;
   get(subject: Subject.AllProfiles): Promise<Profile[]>;
 
   subscribe(this, subject: Subject.ProfileImage, handler: (image: string) => void): () => void;
-  get(subject: Subject.ProfileImage, payload?: { email?: string; size?: number; }): Promise<string>;
+  get(subject: Subject.ProfileImage, payload?: { email?: string; size?: number }): Promise<string>;
 
   subscribe(this, subject: Subject.CurrentProfile, handler: (profile: Profile) => void): () => void;
   get(subject: Subject.CurrentProfile): Promise<Profile>;
@@ -60,7 +61,7 @@ export type API = {
   subscribe(this, subject: Subject.ShowSettings, handler: (visible: boolean) => void): () => void;
   get(subject: Subject.ShowSettings): Promise<boolean>;
   set(subject: Subject.ShowSettings, payload: boolean): Promise<boolean>;
-}
+};
 
 export enum Subject {
   CurrentProfile = 'current-profile',
@@ -68,5 +69,6 @@ export enum Subject {
   AllProfiles = 'all-profiles',
   Settings = 'settings',
   ShowSettings = 'show-settings',
+  OpenSettings = 'open-settings',
   Ping = 'ping',
 }

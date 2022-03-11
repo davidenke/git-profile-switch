@@ -4,7 +4,7 @@ import { BrowserWindow, ipcMain, Tray } from 'electron';
 import { Subject } from '../common/types';
 import { CONFIG_PATH } from './utils/meta.utils';
 import { generateId } from './utils/request.utils';
-import { loadSettings, saveSettings, showSettings, toggleSettings } from './utils/settings.utils';
+import { loadSettings, openSettings, saveSettings, showSettings, toggleSettings } from './utils/settings.utils';
 
 import { updateTray } from './tray';
 import { getProfile, getProfileImage, getProfiles, updateProfile } from './profile';
@@ -57,8 +57,10 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     }
   });
 
+  ipcMain.on(Subject.OpenSettings, () => openSettings());
+
   // https://thisdavej.com/how-to-watch-for-files-changes-in-node-js/
-  watch(CONFIG_PATH, async (event) => {
+  watch(CONFIG_PATH, async event => {
     if (event !== 'change') {
       return;
     }
@@ -67,5 +69,4 @@ export const registerActions = (tray: Tray, window: BrowserWindow) => {
     await updateTray(tray, profile);
     window.webContents.send(Subject.CurrentProfile, { id: generateId(), type: 'get', payload: profile });
   });
-
 };

@@ -96,6 +96,7 @@ declare namespace LocalJSX {
     }
     interface GpsMenuBarSettings {
         "disabled"?: boolean;
+        "onOpen"?: (event: CustomEvent<void>) => void;
         "onThemeSelected"?: (event: CustomEvent<Theme>) => void;
         "onUpdated"?: (event: CustomEvent<Settings>) => void;
         "settings"?: Settings;
