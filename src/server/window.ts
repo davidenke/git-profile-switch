@@ -14,6 +14,7 @@ export const createWindow = async (isDevelopment = false, port = 3333): Promise<
     frame: false,
     fullscreenable: false,
     resizable: false,
+    skipTaskbar: true,
     transparent: true,
     webPreferences: {
       devTools: isDevelopment,

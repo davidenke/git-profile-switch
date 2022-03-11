@@ -28,7 +28,7 @@ let tray: Tray;
 let menu: Menu;
 
 // Don't show the app in the dock
-app.dock.hide();
+app.dock?.hide();
 
 // Initialize tray and detail window
 app.on('ready', async () => {
