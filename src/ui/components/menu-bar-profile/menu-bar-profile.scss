@@ -5,15 +5,13 @@
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
-  @include utils.transition(height);
 }
 
-:host(:not([visible])) {
-  max-height: 0;
-}
-
-:host([visible]) {
-  max-height: utils.base-size(6);
+input,
+section {
+  &:not(:last-child) {
+    margin-bottom: utils.base-size(.75);
+  }
 }
 
 input {
@@ -24,9 +22,5 @@ input {
 
   @include utils.with-theme(dark) {
     filter: invert(.85);
-  }
-
-  &:not(:last-child) {
-    margin-bottom: utils.base-size(.75);
   }
 }

@@ -1,43 +1,39 @@
-import { Component, ComponentInterface, Event, EventEmitter, h, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { EventWithTarget, Profile } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-profile',
   styleUrl: 'menu-bar-profile.scss',
-  shadow: true
+  shadow: true,
 })
 export class MenuBarProfile implements ComponentInterface {
-
   @Event()
-  readonly updated: EventEmitter<Profile['user']>;
+  readonly updated: EventEmitter<Profile>;
 
   @Prop({ mutable: true })
-  email = '';
+  profile!: Profile;
 
-  @Prop({ mutable: true })
-  name = '';
-
-  @Prop({ reflect: true })
-  visible = false;
-
-  handleInput({ target: { value } }: EventWithTarget<HTMLInputElement>, name: 'email' | 'name') {
-    this[name] = value;
-    this.updated.emit({ email: this.email, name: this.name });
+  handleInput<G extends keyof Profile, K extends keyof Profile[G]>({ target: { value } }: EventWithTarget<HTMLInputElement>, group: G, key: K) {
+    this.profile[group][key] = value as unknown as Profile[G][K];
+    this.updated.emit(this.profile);
   }
 
   render() {
-    return [
-      <input type="text"
-             placeholder="name"
-             value={ this.name }
-             onInput={ (event: EventWithTarget<HTMLInputElement>) => this.handleInput(event, 'name') }
-      />,
-      <input type="email"
-             placeholder="email"
-             value={ this.email }
-             onInput={ (event: EventWithTarget<HTMLInputElement>) => this.handleInput(event, 'email') }
-      />
-    ];
+    return (
+      <Host>
+        <section>
+          <input type="text" placeholder="name" value={this.profile.user.name} onInput={(event: EventWithTarget<HTMLInputElement>) => this.handleInput(event, 'user', 'name')} />
+          <input
+            type="email"
+            placeholder="email"
+            value={this.profile.user.email}
+            onInput={(event: EventWithTarget<HTMLInputElement>) => this.handleInput(event, 'user', 'email')}
+          />
+        </section>
+        <section>
+          <input type="text" placeholder="vim" value={this.profile.core.editor} onInput={(event: EventWithTarget<HTMLInputElement>) => this.handleInput(event, 'core', 'editor')} />
+        </section>
+      </Host>
+    );
   }
-
 }

@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property   | Attribute  | Description | Type       | Default     |
-| ---------- | ---------- | ----------- | ---------- | ----------- |
-| `current`  | `current`  |             | `string`   | `undefined` |
-| `disabled` | `disabled` |             | `boolean`  | `false`     |
-| `items`    | --         |             | `string[]` | `[]`        |
+| Property           | Attribute            | Description | Type       | Default     |
+| ------------------ | -------------------- | ----------- | ---------- | ----------- |
+| `currentProfileId` | `current-profile-id` |             | `string`   | `undefined` |
+| `disabled`         | `disabled`           |             | `boolean`  | `false`     |
+| `items`            | --                   |             | `string[]` | `[]`        |
 
 
 ## Events

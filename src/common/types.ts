@@ -1,26 +1,3 @@
-export type Theme = 'dark' | 'light';
-
-export type Settings = {
-  general: {
-    // https://www.npmjs.com/package/@types/auto-launch
-    // https://www.npmjs.com/package/auto-launch
-    autoStart: boolean;
-  };
-  git: {
-    editor?: string;
-  };
-  theme: {
-    overrideSystem: boolean;
-    prefer?: Theme;
-  };
-};
-
-export type Config = {
-  [group: string]: {
-    [key: string]: string;
-  };
-};
-
 export type Profile = {
   user: {
     name: string;
@@ -33,6 +10,29 @@ export type Profile = {
   };
   init?: {
     defaultBranch?: string;
+  };
+};
+
+export type Theme = 'dark' | 'light';
+
+export type Settings = {
+  general: {
+    // https://www.npmjs.com/package/@types/auto-launch
+    // https://www.npmjs.com/package/auto-launch
+    autoStart: boolean;
+    theme: {
+      overrideSystem: boolean;
+      prefer?: Theme;
+    };
+  };
+  profiles: {
+    [email: string]: Profile;
+  };
+};
+
+export type GitConfig = {
+  [group: string]: {
+    [key: string]: string;
   };
 };
 

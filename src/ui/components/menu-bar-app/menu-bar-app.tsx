@@ -1,13 +1,13 @@
-import { Component, ComponentInterface, h, State } from '@stencil/core';
+import { Component, ComponentInterface, h, Host, State } from '@stencil/core';
+import throttle from 'lodash-es/throttle';
 import { Profile, Settings, Subject, Theme } from '../../../common/types';
 
 @Component({
   tag: 'gps-menu-bar-app',
   styleUrl: 'menu-bar-app.scss',
-  shadow: true
+  shadow: true,
 })
 export class MenuBarApp implements ComponentInterface {
-
   private readonly _subscriptions = new Set<() => void>();
 
   private readonly _avatarSize = 28;
@@ -19,33 +19,43 @@ export class MenuBarApp implements ComponentInterface {
   private _isEditing = false;
 
   @State()
-  private _profiles: Profile[] = [];
-
-  @State()
   private _settings: Settings;
 
   @State()
-  private _currentProfile?: Profile;
+  private _currentProfileId?: string;
 
   @State()
   private _currentImage?: string;
 
+  private get _currentProfile(): Profile {
+    return this._settings.profiles[this._currentProfileId];
+  }
+
+  private async _updateSettings(settings: Settings) {
+    this._isIdle = true;
+    this._settings = await window.api.set(Subject.Settings, settings);
+    this._isIdle = false;
+  }
+
+  readonly updateSettings = throttle(this._updateSettings, 500);
+
   async componentWillLoad() {
     // subscribe to subjects
-    this._subscriptions.add(window.api.subscribe(Subject.AllProfiles, profiles => this._profiles = profiles));
-    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => this._isEditing = visible));
-    this._subscriptions.add(window.api.subscribe(Subject.Settings, settings => this._settings = settings));
-    this._subscriptions.add(window.api.subscribe(Subject.CurrentProfile, async profile => {
-      this._currentProfile = profile;
-      this._currentImage = await window.api.get(Subject.ProfileImage, {
-        email: profile?.user?.email,
-        size: this._avatarSize * window.devicePixelRatio || 1
-      });
-    }));
+    this._subscriptions.add(window.api.subscribe(Subject.ShowSettings, visible => (this._isEditing = visible)));
+    this._subscriptions.add(window.api.subscribe(Subject.Settings, settings => (this._settings = settings)));
+    this._subscriptions.add(
+      window.api.subscribe(Subject.CurrentProfile, async profile => {
+        this._currentProfileId = profile?.user?.email;
+        this._currentImage = await window.api.get(Subject.ProfileImage, {
+          email: profile?.user?.email,
+          size: this._avatarSize * window.devicePixelRatio || 1,
+        });
+      }),
+    );
 
     // request once
-    this._profiles = await window.api.get(Subject.AllProfiles);
-    this._currentProfile = await window.api.get(Subject.CurrentProfile);
+    const currentProfile = await window.api.get(Subject.CurrentProfile);
+    this._currentProfileId = currentProfile.user.email;
     this._settings = await window.api.get(Subject.Settings);
   }
 
@@ -54,7 +64,7 @@ export class MenuBarApp implements ComponentInterface {
   }
 
   async selectProfile(email: string) {
-    const profile = this._profiles.find(profile => profile?.user?.email === email);
+    const profile = Object.values(this._settings.profiles).find(profile => profile?.user?.email === email);
     if (profile !== undefined) {
       this._isIdle = true;
       await window.api.set(Subject.CurrentProfile, profile);
@@ -71,14 +81,14 @@ export class MenuBarApp implements ComponentInterface {
     document.body.setAttribute('theme', theme);
   }
 
-  updateProfile({ email, name }: Profile['user']) {
-    console.log(email, name)
-  }
-
-  async updateSettings(settings: Settings) {
-    this._isIdle = true;
-    this._settings = await window.api.set(Subject.Settings, settings);
-    this._isIdle = false;
+  updateCurrentProfile(profile: Profile) {
+    // remove existing
+    delete this._settings.profiles[this._currentProfileId];
+    // add modified
+    this._currentProfileId = profile.user.email;
+    this._settings.profiles[this._currentProfileId] = profile;
+    // submit changes
+    this.updateSettings(this._settings);
   }
 
   openSettings() {
@@ -86,31 +96,26 @@ export class MenuBarApp implements ComponentInterface {
   }
 
   render() {
-    return [
-      <gps-menu-bar-info avatarSize={ this._avatarSize }
-                         profile={ this._currentProfile }
-                         image={ this._currentImage }
-      >
-        <gps-menu-bar-icon-settings onClick={ () => this.toggleSettings() }/>
-      </gps-menu-bar-info>,
-      <gps-menu-bar-switch current={ this._currentProfile?.user?.email }
-                           disabled={ false /*this._isEditing*/ }
-                           items={ this._profiles.map(({ user }) => user.email) }
-                           onSwitch={ ({ detail }) => this.selectProfile(detail) }
-      />,
-      <gps-menu-bar-profile email={ this._currentProfile?.user?.email }
-                            name={ this._currentProfile?.user?.name }
-                            visible={ this._isEditing }
-                            onUpdated={({ detail }) => this.updateProfile(detail)}
-      />,
-      <gps-menu-bar-settings disabled={ this._isIdle }
-                             settings={ this._settings }
-                             visible={ this._isEditing }
-                             onThemeSelected={ ({ detail }) => this.setTheme(detail) }
-                             onUpdated={ ({ detail }) => this.updateSettings(detail) }
-                             onOpen={ () => this.openSettings() }
-      />,
-    ];
+    return (
+      <Host>
+        <gps-menu-bar-info avatarSize={this._avatarSize} profile={this._currentProfile} image={this._currentImage}>
+          <gps-menu-bar-icon-settings onClick={() => this.toggleSettings()} />
+        </gps-menu-bar-info>
+        <gps-menu-bar-switch
+          currentProfileId={this._currentProfileId}
+          disabled={false /*|| this._isEditing*/}
+          items={Object.keys(this._settings.profiles)}
+          onSwitch={({ detail }) => this.selectProfile(detail)}
+        />
+        <gps-menu-bar-profile profile={this._currentProfile} onUpdated={({ detail }) => this.updateCurrentProfile(detail)} />
+        <gps-menu-bar-settings
+          disabled={this._isIdle}
+          settings={this._settings}
+          onThemeSelected={({ detail }) => this.setTheme(detail)}
+          onUpdated={({ detail }) => this.updateSettings(detail)}
+          onOpen={() => this.openSettings()}
+        />
+      </Host>
+    );
   }
-
 }

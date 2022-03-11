@@ -1,6 +1,6 @@
-import { Config, Profile } from '../../common/types';
+import { GitConfig, Profile } from '../../common/types';
 
-export const serializeConfig = (config: Config): string => {
+export const serializeConfig = (config: GitConfig): string => {
   const groups = Object.keys(config);
   return groups
     .reduce((prepared, group) => {
@@ -14,7 +14,7 @@ export const serializeConfig = (config: Config): string => {
     .join('\n');
 };
 
-export const parseConfig = (buffer: Buffer): Config => {
+export const parseConfig = (buffer: Buffer): GitConfig => {
   let group: string;
   return buffer
     .toString()
@@ -32,10 +32,10 @@ export const parseConfig = (buffer: Buffer): Config => {
         config[group][key.trim()] = value.trim();
       }
       return config;
-    }, {} as Config);
+    }, {} as GitConfig);
 };
 
-export const updateConfig = (profile: Profile, buffer: Buffer): Config => {
+export const updateConfig = (profile: Profile, buffer: Buffer): GitConfig => {
   const config = parseConfig(buffer);
   Object
     .keys(profile)

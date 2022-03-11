@@ -7,18 +7,16 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type      | Default |
-| --------- | --------- | ----------- | --------- | ------- |
-| `email`   | `email`   |             | `string`  | `''`    |
-| `name`    | `name`    |             | `string`  | `''`    |
-| `visible` | `visible` |             | `boolean` | `false` |
+| Property               | Attribute | Description | Type                                                                                                                                                       | Default     |
+| ---------------------- | --------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `profile` _(required)_ | --        |             | `{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }` | `undefined` |
 
 
 ## Events
 
-| Event     | Description | Type                                                                 |
-| --------- | ----------- | -------------------------------------------------------------------- |
-| `updated` |             | `CustomEvent<{ name: string; email: string; signingKey?: string; }>` |
+| Event     | Description | Type                                                                                                                                                                    |
+| --------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `updated` |             | `CustomEvent<{ user: { name: string; email: string; signingKey?: string; }; core?: { editor?: string; excludesfile?: string; }; init?: { defaultBranch?: string; }; }>` |
 
 
 ## Dependencies

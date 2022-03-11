@@ -12,7 +12,7 @@ export class MenuBarSwitch implements ComponentInterface {
   readonly switch: EventEmitter<string>;
 
   @Prop({ mutable: true })
-  current?: string;
+  currentProfileId?: string;
 
   @Prop()
   items: string[] = [];
@@ -31,7 +31,7 @@ export class MenuBarSwitch implements ComponentInterface {
       >
         { this.items.map(item => (
           <option value={ item }
-                  selected={ item === this.current }
+                  selected={ item === this.currentProfileId }
           >
             { item }
           </option>

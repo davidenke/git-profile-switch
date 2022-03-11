@@ -19,7 +19,7 @@ export const createWindow = async (isDevelopment = false, port = 3333): Promise<
       devTools: isDevelopment,
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
-      preload: join(__dirname, 'preload.js'), // use a preload script
+      preload: join(__dirname, 'preload.js'), // inject ipc api methods
       spellcheck: false // disable spellcheck
     }
   });

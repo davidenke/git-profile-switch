@@ -17,17 +17,14 @@ export namespace Components {
         "profile"?: Profile;
     }
     interface GpsMenuBarProfile {
-        "email": string;
-        "name": string;
-        "visible": boolean;
+        "profile": Profile;
     }
     interface GpsMenuBarSettings {
         "disabled": boolean;
-        "settings"?: Settings;
-        "visible": boolean;
+        "settings": Settings;
     }
     interface GpsMenuBarSwitch {
-        "current"?: string;
+        "currentProfileId"?: string;
         "disabled": boolean;
         "items": string[];
     }
@@ -89,21 +86,18 @@ declare namespace LocalJSX {
         "profile"?: Profile;
     }
     interface GpsMenuBarProfile {
-        "email"?: string;
-        "name"?: string;
-        "onUpdated"?: (event: CustomEvent<Profile['user']>) => void;
-        "visible"?: boolean;
+        "onUpdated"?: (event: CustomEvent<Profile>) => void;
+        "profile": Profile;
     }
     interface GpsMenuBarSettings {
         "disabled"?: boolean;
         "onOpen"?: (event: CustomEvent<void>) => void;
         "onThemeSelected"?: (event: CustomEvent<Theme>) => void;
         "onUpdated"?: (event: CustomEvent<Settings>) => void;
-        "settings"?: Settings;
-        "visible"?: boolean;
+        "settings": Settings;
     }
     interface GpsMenuBarSwitch {
-        "current"?: string;
+        "currentProfileId"?: string;
         "disabled"?: boolean;
         "items"?: string[];
         "onSwitch"?: (event: CustomEvent<string>) => void;

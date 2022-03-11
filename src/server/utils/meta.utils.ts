@@ -13,7 +13,9 @@ export const IMAGES_PATH = join(TEMP_PATH, APP_ID, 'images');
 export const SETTINGS_PATH = join(TEMP_PATH, APP_ID, 'settings.json');
 
 export const DEFAULT_SETTINGS: Settings = {
-  general: { autoStart: false },
-  git: { editor: 'vim' },
-  theme: { overrideSystem: false },
+  general: {
+    autoStart: false,
+    theme: { overrideSystem: false },
+  },
+  profiles: {},
 };

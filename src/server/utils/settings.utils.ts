@@ -8,14 +8,14 @@ export const mergeDefaultSettings = (settings: Partial<Settings>): Settings => (
   general: {
     ...DEFAULT_SETTINGS.general,
     ...settings.general,
+    theme: {
+      ...DEFAULT_SETTINGS.general.theme,
+      ...settings.general.theme,
+    },
   },
-  git: {
-    ...DEFAULT_SETTINGS.git,
-    ...settings.git,
-  },
-  theme: {
-    ...DEFAULT_SETTINGS.theme,
-    ...settings.theme,
+  profiles: {
+    ...DEFAULT_SETTINGS.profiles,
+    ...settings.profiles,
   },
 });
 
