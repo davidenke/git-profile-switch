@@ -1,11 +1,10 @@
 import { resolve } from 'path';
 
 import { app, BrowserWindow, Menu, Tray } from 'electron';
-import { default as electronReload } from 'electron-reload';
 import { is } from 'electron-util';
 
 import { registerActions } from './server/actions';
-import { getProfile, updateProfile } from './server/profile';
+import { getProfile, getProfiles, updateProfile } from './server/profile';
 import { createMenu } from './server/menu';
 import { createTray } from './server/tray';
 import { createWindow, showWindow } from './server/window';
@@ -16,8 +15,10 @@ import { showSettings } from './server/utils/settings.utils';
 // configure reload behaviour in development environment
 // https://github.com/yan-foto/electron-reload
 if (is.development) {
-  const electron = resolve(__dirname, '../', 'node_modules', '.bin', 'electron');
-  electronReload(__dirname, { electron });
+  import('electron-reload').then(module => {
+    const electron = resolve(__dirname, '../', 'node_modules', '.bin', 'electron');
+    module.default(__dirname, { electron });
+  });
 }
 
 // Keep a global reference of the window object, if you don't, the window will
