@@ -32,7 +32,7 @@ export const loadSettings = async (): Promise<Settings> => {
 };
 
 export const saveSettings = async (settings: Settings): Promise<void> => {
-  const data = JSON.stringify(mergeDefaultSettings(settings));
+  const data = JSON.stringify(mergeDefaultSettings(settings), null, 2);
   await writeFileAsync(SETTINGS_PATH, data);
 };
 
