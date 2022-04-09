@@ -9,7 +9,7 @@
     "build:server": "rollup --config rollup.config.ts",
     "build:ui": "stencil build --docs",
     "build": "run-p build:*",
-    "package": "electron-packager dist \"Git Profile Switch\" --out bundle --overwrite",
+    "package": "electron-packager dist \"Git Profile Switch\" --out bundle --overwrite --all",
     "prestart": "run-s clean",
     "start:server": "rollup --config rollup.config.ts --watch",
     "start:ui": "stencil build --docs --dev --es5 --watch --serve",
