@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "js.neutralino.sample",
+  "applicationId": "org.davidenke.git-profile-switch",
   "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
@@ -24,20 +24,12 @@
   },
   "modes": {
     "window": {
-      "title": "git-profile-switch",
-      "width": 800,
-      "height": 500,
-      "minWidth": 400,
-      "minHeight": 200,
-      "fullScreen": false,
-      "alwaysOnTop": false,
-      "icon": "/resources/icons/appIcon.png",
-      "enableInspector": true,
-      "borderless": false,
-      "maximize": false,
-      "hidden": false,
-      "resizable": true,
-      "exitProcessOnClose": false
+      "alwaysOnTop": true,
+      "borderless": true,
+      "resizable": false,
+      "width": 400,
+      "height": 200,
+      "hidden": true
     },
     "browser": {
       "globalVariables": {
@@ -60,7 +52,7 @@
     "binaryName": "git-profile-switch",
     "resourcesPath": "/resources/",
     "extensionsPath": "/extensions/",
-    "clientLibrary": "/resources/js/neutralino.js",
+    "clientLibrary": "/node_modules/@neutralinojs/lib/dist/neutralino.js",
     "binaryVersion": "4.10.0",
     "clientVersion": "3.8.2"
   }

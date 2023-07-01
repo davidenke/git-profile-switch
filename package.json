@@ -1,19 +1,45 @@
 {
   "name": "@davidenke/git-profile-switch",
-  "version": "0.0.1",
-  "description": "Mac menu bar switch for git profiles.",
-  "main": "dist/index.js",
+  "version": "0.2.0",
+  "description": "Menu bar switch for git profiles.",
+  "type": "module",
   "author": {
     "email": "david@enke.dev",
     "name": "David Enke"
   },
   "scripts": {
-    "start": "neu run"
+    "postinstall": "neu update",
+    "clean": "shx rm -rf dist resources",
+    "prestart": "run-p -lns build",
+    "start:bundle": "tsx esbuild.config.ts --watch",
+    "start:bin": "neu run",
+    "start": "run-p -lns start:*",
+    "prebuild": "npm run clean",
+    "build:bundle": "tsx esbuild.config.ts --ci",
+    "build:bin": "neu build",
+    "build": "run-s -lns build:*"
   },
-  "dependencies": {},
+  "engines": {
+    "node": "^18"
+  },
+  "dependencies": {
+    "@neutralinojs/lib": "3.10.0"
+  },
   "devDependencies": {
-    "@neutralinojs/lib": "3.10.0",
-    "@neutralinojs/neu": "9.6.0"
+    "@neutralinojs/neu": "9.6.0",
+    "@types/esbuild-copy-static-files": "0.1.0",
+    "@types/node": "18.16.18",
+    "@types/postcss-preset-env": "7.7.0",
+    "autoprefixer": "10.4.14",
+    "esbuild": "0.18.11",
+    "esbuild-copy-static-files": "0.1.0",
+    "esbuild-sass-plugin": "2.10.0",
+    "npm-run-all": "4.1.5",
+    "postcss": "8.4.24",
+    "postcss-preset-env": "8.5.1",
+    "shx": "0.3.4",
+    "tsx": "3.12.7",
+    "typescript": "5.1.6"
   },
   "license": "MIT",
   "private": true
