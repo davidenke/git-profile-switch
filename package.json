@@ -7,7 +7,14 @@
     "email": "david@enke.dev",
     "name": "David Enke"
   },
+  "scripts": {
+    "start": "neu run"
+  },
   "dependencies": {},
+  "devDependencies": {
+    "@neutralinojs/lib": "3.10.0",
+    "@neutralinojs/neu": "9.6.0"
+  },
   "license": "MIT",
   "private": true
 }

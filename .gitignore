@@ -22,3 +22,9 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+
+# Neutralinojs
+.lite_workspace.lua
+neutralino.js
+.storage
+*.log
