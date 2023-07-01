@@ -1,0 +1,13 @@
+{
+  "name": "@davidenke/git-profile-switch",
+  "version": "0.0.1",
+  "description": "Mac menu bar switch for git profiles.",
+  "main": "dist/index.js",
+  "author": {
+    "email": "david@enke.dev",
+    "name": "David Enke"
+  },
+  "dependencies": {},
+  "license": "MIT",
+  "private": true
+}
