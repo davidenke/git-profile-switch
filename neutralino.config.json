@@ -14,38 +14,19 @@
     "writeToLogFile": true
   },
   "nativeAllowList": ["app.*", "os.*", "debug.log"],
-  "globalVariables": {
-    "TEST1": "Hello",
-    "TEST2": [2, 4, 5],
-    "TEST3": {
-      "value1": 10,
-      "value2": {}
-    }
-  },
   "modes": {
     "window": {
       "alwaysOnTop": true,
       "borderless": true,
+      "enableInspector": true,
+      "exitProcessOnClose": false,
+      "hidden": false,
+      "maximize": false,
       "resizable": false,
       "width": 400,
       "height": 200,
-      "hidden": true
-    },
-    "browser": {
-      "globalVariables": {
-        "TEST": "Test value browser"
-      },
-      "nativeBlockList": ["filesystem.*"]
-    },
-    "cloud": {
-      "url": "/resources/#cloud",
-      "nativeAllowList": ["app.*"]
-    },
-    "chrome": {
-      "width": 800,
-      "height": 500,
-      "args": "--user-agent=\"Neutralinojs chrome mode\"",
-      "nativeBlockList": ["filesystem.*", "os.*"]
+      "title": "Git Profile Switch",
+      "icon": "/resources/icons/app.png"
     }
   },
   "cli": {

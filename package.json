@@ -17,6 +17,7 @@
     "prebuild": "npm run clean",
     "build:bundle": "tsx esbuild.config.ts --ci",
     "build:bin": "neu build",
+    "build:pack": "tsx tools/pack-macos --agent --icon src/icons/icon.icns",
     "build": "run-s -lns build:*"
   },
   "engines": {
