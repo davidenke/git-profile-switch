@@ -44,7 +44,7 @@ await copyResources(target, resources);
 await copyIcon(target, args.icon);
 
 // write Info.plist
-const plist = generatePlist(config.name, config.title, config.uid, args.agent);
+const plist = generatePlist(config.name, config.title, config.uid, config.version, args.agent);
 await writeInfoPlist(target, plist);
 
 // done

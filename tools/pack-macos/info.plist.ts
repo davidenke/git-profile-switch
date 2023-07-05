@@ -1,4 +1,4 @@
-export function generatePlist(name: string, title: string, uid: string, agent = false) {
+export function generatePlist(name: string, title: string, uid: string, version: string, agent = false) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -14,7 +14,11 @@ export function generatePlist(name: string, title: string, uid: string, agent = 
     <key>CFBundleIdentifier</key>
     <string>${uid}</string>
     <key>CFBundleName</key>
-    <string>${name}</string>
+    <string>${title}</string>
+    <key>CFBundleShortVersionString</key>
+    <string>${version}</string>
+    <key>CFBundleVersion</key>
+    <string>${version}</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
