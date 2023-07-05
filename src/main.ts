@@ -1,10 +1,5 @@
-// This is just a sample app. You can structure your Neutralinojs app code as you wish.
-// This example app is written with vanilla JavaScript and HTML.
-// Feel free to use any frontend framework you like :)
-// See more details: https://neutralino.js.org/docs/how-to/use-a-frontend-library
-
 function showInfo() {
-  document.getElementById('info').innerHTML = `
+  document.getElementById('info')!.innerHTML = `
       ${NL_APPID} is running on ports ${NL_PORT} inside ${NL_OS}
       <br/><br/>
       <span>server: v${NL_VERSION} . client: v${NL_CVERSION}</span>
@@ -35,7 +30,7 @@ function setTray() {
   Neutralino.os.setTray(tray);
 }
 
-function onTrayMenuItemClicked(event) {
+function onTrayMenuItemClicked(event: CustomEvent<{ id: 'VERSION' | 'QUIT' }>) {
   switch (event.detail.id) {
     case 'VERSION':
       Neutralino.os.showMessageBox('Version information', `Neutralinojs server: v${NL_VERSION} | Neutralinojs client: v${NL_CVERSION}`);
