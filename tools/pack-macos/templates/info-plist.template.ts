@@ -23,13 +23,6 @@ export function generatePlist(name: string, title: string, uid: string, version:
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
     <string>10.13.0</string>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <true />
-    </dict>
-    <key>NSHighResolutionCapable</key>
-    <true />
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.developer-tools</string>${agent ? `
     <key>LSUIElement</key>
@@ -42,6 +35,13 @@ export function generatePlist(name: string, title: string, uid: string, version:
     <false/>
     <key>NSSupportsAutomaticGraphicsSwitching</key>
     <true/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true />
+    </dict>
+    <key>NSHighResolutionCapable</key>
+    <true />
   </dict>
 </plist>
 `;

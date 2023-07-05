@@ -1,3 +1,6 @@
+.tmp/
+.repo/
+
 bin/
 dist/
 resources/

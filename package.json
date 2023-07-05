@@ -8,7 +8,8 @@
     "name": "David Enke"
   },
   "scripts": {
-    "postinstall": "neu update",
+    "postinstall:default": "neu update",
+    "postinstall": "tsx tools/compile-binary --tempDir .repo --pythonBin python3",
     "clean": "shx rm -rf dist resources",
     "prestart": "run-p -lns build",
     "start:bundle": "tsx esbuild.config.ts --watch",
