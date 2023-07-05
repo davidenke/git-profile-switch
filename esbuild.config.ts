@@ -87,8 +87,10 @@ if (watch) {
     const cyan = (message: string) => (ci ? message : `\u001b[36m${message}\u001b[0m`);
 
     // start dev server in watch mode
-    const ctx = await context(options);
+    const bannerJs = `new EventSource('/esbuild').addEventListener('change', () => location.reload())`;
+    const ctx = await context({ ...options, banner: { js: bannerJs } });
     await ctx.watch();
+
     const { host: hostname } = await ctx.serve({ servedir: 'resources', port: Number(port) });
 
     // notify user
